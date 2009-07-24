@@ -18,13 +18,13 @@ else:
     # for Python 3.0 compatibility
     class_types = type
 
-
 __version__ = '0.3.0'
 
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
 # from '.py', '.pyc' *and* '.pyo'
-VALID_MODULE_NAME = re.compile(r'[_a-zA-Z][_a-zA-Z0-9]*\.py$', re.IGNORECASE)
+# Also doesn't all unicode identifiers that are valid in Python 3
+VALID_MODULE_NAME = re.compile(r'[_a-z][_a-z0-9]*\.py$', re.IGNORECASE)
 
 def make_failed_import_test(name, suiteClass):
     message = 'Failed to import test module: %r' % name
@@ -39,7 +39,7 @@ def make_failed_import_test(name, suiteClass):
     attrs = {test_name: testImportFailure}
     ModuleImportFailure = type('ModuleImportFailure', (unittest.TestCase,), attrs)
     return suiteClass((ModuleImportFailure(test_name),))
-                  
+
 
 class DiscoveringTestLoader(unittest.TestLoader):
     """
@@ -135,8 +135,6 @@ class DiscoveringTestLoader(unittest.TestLoader):
                     try:
                         module = self._get_module_from_name(name)
                     except:
-                        # screwy way of getting exception to remain
-                        # compatible with Python 2.X and 3.X
                         yield make_failed_import_test(name, self.suiteClass)
                     else:
                         yield self.loadTestsFromModule(module)
@@ -148,7 +146,8 @@ class DiscoveringTestLoader(unittest.TestLoader):
                 tests = None
                 if fnmatch(path, pattern):
                     # only check load_tests if the package directory itself matches the filter
-                    package = self._get_module_from_path(full_path)
+                    name = self._get_name_from_path(full_path)
+                    package = self._get_module_from_path(name)
                     load_tests = getattr(package, 'load_tests', None)
                     tests = self.loadTestsFromModule(package, use_load_tests=False)
 
@@ -300,7 +299,7 @@ if __name__ == '__main__':
     if sys.argv[0] is None:
         # fix for weird behaviour when run with python -m
         # from a zipped egg.
-        sys.argv[0] = 'program.py'
+        sys.argv[0] = 'discover.py'
     main()
     
 """
@@ -308,7 +307,7 @@ This module has the following improvements over what is currently in the
 Python standard library:
 
 * Failure to import a module does not halt discovery
-* Will not attempt to invalidate files whose names are not valid Python
+* Will not attempt to import test files whose names are not valid Python
   identifiers, even if they match the pattern.
 
 """
