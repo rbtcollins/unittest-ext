@@ -2,9 +2,10 @@
 # Licensed under the BSD License
 # See: http://pypi.python.org/pypi/discover
 
-import os
-import sys
 import optparse
+import os
+import re
+import sys
 import traceback
 import types
 import unittest
@@ -18,20 +19,26 @@ else:
     class_types = type
 
 
-__version__ = '0.3.0 alpha'
+__version__ = '0.3.0'
 
+# what about .pyc or .pyo (etc)
+# we would need to avoid loading the same tests multiple times
+# from '.py', '.pyc' *and* '.pyo'
+VALID_MODULE_NAME = re.compile(r'[_a-zA-Z][_a-zA-Z0-9]*\.py$', re.IGNORECASE)
 
-
-def make_failed_import_test(path, suiteClass):
-    message = 'Importing of a test module failed. Path: %r' % path
+def make_failed_import_test(name, suiteClass):
+    message = 'Failed to import test module: %r' % name
     if hasattr(traceback, 'format_exc'):
         # Python 2.3 compatibility
         # format_exc returns two frames of discover.py as well
         message += '\n%s' % traceback.format_exc()
-    class ModuleImportFailure(unittest.TestCase):
-        def testImportFailure(self):
-            raise ImportError(message)
-    return suiteClass((ModuleImportFailure('testImportFailure'),))
+    
+    def testImportFailure(self):
+        raise ImportError(message)
+    test_name = 'test_%s' % name
+    attrs = {test_name: testImportFailure}
+    ModuleImportFailure = type('ModuleImportFailure', (unittest.TestCase,), attrs)
+    return suiteClass((ModuleImportFailure(test_name),))
                   
 
 class DiscoveringTestLoader(unittest.TestLoader):
@@ -117,15 +124,16 @@ class DiscoveringTestLoader(unittest.TestLoader):
 
         for path in paths:
             full_path = os.path.join(start_dir, path)
-            # what about __init__.pyc or pyo (etc)
-            # we would need to avoid loading the same tests multiple times
-            # from '.py', '.pyc' *and* '.pyo'
-            if os.path.isfile(full_path) and path.lower().endswith('.py'):
+            if os.path.isfile(full_path):
+                if not VALID_MODULE_NAME.match(path):
+                    # valid Python identifiers only
+                    continue
+                
                 if fnmatch(path, pattern):
                     # if the test file matches, load it
                     name = self._get_name_from_path(full_path)
                     try:
-                        module = self._get_module_from_path(name)
+                        module = self._get_module_from_name(name)
                     except:
                         # screwy way of getting exception to remain
                         # compatible with Python 2.X and 3.X
@@ -294,3 +302,13 @@ if __name__ == '__main__':
         # from a zipped egg.
         sys.argv[0] = 'program.py'
     main()
+    
+"""
+This module has the following improvements over what is currently in the
+Python standard library:
+
+* Failure to import a module does not halt discovery
+* Will not attempt to invalidate files whose names are not valid Python
+  identifiers, even if they match the pattern.
+
+"""
