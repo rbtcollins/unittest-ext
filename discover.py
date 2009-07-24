@@ -96,18 +96,18 @@ class DiscoveringTestLoader(unittest.TestLoader):
 
         tests = list(self._find_tests(start_dir, pattern))
         return self.suiteClass(tests)
-
-
-    def _get_module_from_path(self, path):
-        """Load a module from a path relative to the top-level directory
-        of a project. Used by discovery."""
+    
+    def _get_name_from_path(self, path):
         path = os.path.splitext(os.path.normpath(path))[0]
-
+        
         _relpath = os.path.relpath(path, self._top_level_dir)
         assert not os.path.isabs(_relpath), "Path must be within the project"
         assert not _relpath.startswith('..'), "Path must be within the project"
 
         name = _relpath.replace(os.path.sep, '.')
+        return name
+    
+    def _get_module_from_name(self, name):
         __import__(name)
         return sys.modules[name]
 
@@ -123,12 +123,13 @@ class DiscoveringTestLoader(unittest.TestLoader):
             if os.path.isfile(full_path) and path.lower().endswith('.py'):
                 if fnmatch(path, pattern):
                     # if the test file matches, load it
+                    name = self._get_name_from_path(full_path)
                     try:
-                        module = self._get_module_from_path(full_path)
+                        module = self._get_module_from_path(name)
                     except:
                         # screwy way of getting exception to remain
                         # compatible with Python 2.X and 3.X
-                        yield make_failed_import_test(full_path, self.suiteClass)
+                        yield make_failed_import_test(name, self.suiteClass)
                     else:
                         yield self.loadTestsFromModule(module)
             elif os.path.isdir(full_path):
