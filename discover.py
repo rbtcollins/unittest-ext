@@ -23,11 +23,10 @@ __version__ = '0.3.0'
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
 # from '.py', '.pyc' *and* '.pyo'
-# Also doesn't all unicode identifiers that are valid in Python 3
-VALID_MODULE_NAME = re.compile(r'[_a-z][_a-z0-9]*\.py$', re.IGNORECASE)
+VALID_MODULE_NAME = re.compile(r'[_a-z]\w*\.py$', re.IGNORECASE)
 
 def make_failed_import_test(name, suiteClass):
-    message = 'Failed to import test module: %r' % name
+    message = 'Failed to import test module: %s' % name
     if hasattr(traceback, 'format_exc'):
         # Python 2.3 compatibility
         # format_exc returns two frames of discover.py as well
@@ -35,10 +34,9 @@ def make_failed_import_test(name, suiteClass):
     
     def testImportFailure(self):
         raise ImportError(message)
-    test_name = 'test_%s' % name
-    attrs = {test_name: testImportFailure}
+    attrs = {name: testImportFailure}
     ModuleImportFailure = type('ModuleImportFailure', (unittest.TestCase,), attrs)
-    return suiteClass((ModuleImportFailure(test_name),))
+    return suiteClass((ModuleImportFailure(name),))
 
 
 class DiscoveringTestLoader(unittest.TestLoader):
