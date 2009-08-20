@@ -72,3 +72,14 @@ requests should be posted): http://code.google.com/p/unittest-ext/
 
 The latest development version of discover.py can be found at:
 http://code.google.com/p/unittest-ext/source/browse/trunk/discover.py
+
+
+CHANGELOG
+=========
+
+2009/08/20 0.3.0
+----------------
+
+* Failing to import a file (e.g. due to a syntax error) no longer halts discovery but is reported as a failure.
+* Discovery will not attempt to import test files whose names are not valid Python
+  identifiers, even if they match the pattern.
