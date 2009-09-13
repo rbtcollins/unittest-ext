@@ -18,7 +18,7 @@ else:
     # for Python 3.0 compatibility
     class_types = type
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
@@ -145,7 +145,7 @@ class DiscoveringTestLoader(unittest.TestLoader):
                 if fnmatch(path, pattern):
                     # only check load_tests if the package directory itself matches the filter
                     name = self._get_name_from_path(full_path)
-                    package = self._get_module_from_path(name)
+                    package = self._get_module_from_name(name)
                     load_tests = getattr(package, 'load_tests', None)
                     tests = self.loadTestsFromModule(package, use_load_tests=False)
 

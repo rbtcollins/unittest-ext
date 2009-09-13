@@ -77,6 +77,11 @@ http://code.google.com/p/unittest-ext/source/browse/trunk/discover.py
 CHANGELOG
 =========
 
+2009/09/13 0.3.1
+----------------
+
+* Fixed bug when package directory matches the pattern.
+
 2009/08/20 0.3.0
 ----------------
 
