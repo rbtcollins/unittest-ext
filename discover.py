@@ -18,7 +18,7 @@ else:
     # for Python 3.0 compatibility
     class_types = type
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
@@ -55,9 +55,10 @@ class DiscoveringTestLoader(unittest.TestLoader):
                 tests.append(self.loadTestsFromTestCase(obj))
 
         load_tests = getattr(module, 'load_tests', None)
+        tests = self.suiteClass(tests)
         if use_load_tests and load_tests is not None:
             return load_tests(self, tests, None)
-        return self.suiteClass(tests)
+        return tests
 
 
     def discover(self, start_dir, pattern='test*.py', top_level_dir=None):
@@ -299,13 +300,15 @@ if __name__ == '__main__':
         # from a zipped egg.
         sys.argv[0] = 'discover.py'
     main()
-    
-"""
-This module has the following improvements over what is currently in the
-Python standard library:
 
-* Failure to import a module does not halt discovery
-* Will not attempt to import test files whose names are not valid Python
-  identifiers, even if they match the pattern.
+"""
+CHANGELOG
+=========
+
+0.3.2
+-----
+
+If ``load_tests`` exists it is passed the standard tests as a ``TestSuite``
+rather than a list of tests.
 
 """
