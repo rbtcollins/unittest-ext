@@ -300,15 +300,3 @@ if __name__ == '__main__':
         # from a zipped egg.
         sys.argv[0] = 'discover.py'
     main()
-
-"""
-CHANGELOG
-=========
-
-0.3.2
------
-
-If ``load_tests`` exists it is passed the standard tests as a ``TestSuite``
-rather than a list of tests.
-
-"""
