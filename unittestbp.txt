@@ -1,0 +1,80 @@
+====================
+ New *and* Improved
+====================
+----------------------------
+ Coming changes to unittest
+----------------------------
+
+.. contents::
+
+Introduction
+============
+
+he proposal is on the new features that have been added to the Python `unittest module <http://docs.python.org/library/unittest.html>`_ in recent months. ``unittest`` is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
+
+Until sometime after Python 2.6 was released ``unittest`` was stable to the point of rigor mortis, but several developers have been working on adding much needed features and some of the most successful concepts (like test discovery) from the other major Python test frameworks. These changes will arrive in Python 2.7 and 3.2 (although a *few* of them made it into Python 3.1).
+
+Putting together the list of changes since Python 2.6 for the talk made me realise just how much has changed. Here's an overview of the most important changes from the talk description:
+
+
+New Assert Methods
+==================
+
+
+* Brief introduction to ``unittest``, its past and its present
+* New assert methods
+
+  - ``assertGreater`` / ``assertLess`` etc
+  - ``assertRegexpMatches``
+  - ``assertIn`` / ``assertNotIn``
+  - ``assertNone`` / ``assertNotNone``
+  - ``assertIs`` / ``assertIsNot``
+  - ``assertIsInstance`` / ``assertNotIsInstance``
+  - ``assertSameElements``
+  - ``assertDictContainsSubset``
+  - Deprecated methods (``failIf`` / ``failUnless`` variants and ``assertEquals``)
+  
+Deprecations
+============
+
+
+Type Specific Equality
+======================  
+
+* New type specific equality functions
+
+  - ``assertMultilineEqual``   - better string comparison
+  - ``assertSetEqual``
+  - ``assertDictEqual``
+  - ``assertListEqual``
+  - ``assertTupleEqual``
+  - ``assertSequenceEqual``
+  - ``addTypeEqualityFunc``
+      
+* New ``assertRaises`` behavior
+
+  - Acts as a context manager
+  - Keeps exception instance as context attribute
+  - ``assertRaisesRegexp``
+      
+* New command line behavior
+
+  - New exit and verbosity parameters to main
+  - ``python -m unittest foo``
+  - Test discovery (``python -m unittest discover``)
+  - The ``load_tests`` protocol
+  - The `discover <http://pypi.python.org/pypi/discover>`_ module
+
+* Better resource handling with ``addCleanup``
+* Better messages with the ``longMessage`` class attribute
+* Test skipping
+* ``TestResult``: ``startTestRun`` and ``stopTestRun`` 
+* The ``unittestbp`` package (back-port to Python 2.4 of the changes)
+* The way forward (perhaps...)
+
+  - generational and parameterized tests
+  - shared fixtures
+  - doctest integration
+  - test outcomes (mentioning the vision of `Robert Collins <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_)
+
+Of course, if you want to know more you'll have to come to the talk (assuming it gets accepted) or wait until I write it up in more detail. That second part *will* happen, but I wouldn't hold your breath waiting for it... In the meantime the changes are all documented so you can read about them in the `development documentation for unittest <http://docs.python.org/dev/library/unittest.html>`_.
