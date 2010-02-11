@@ -1,5 +1,11 @@
 from __future__ import with_statement
 
+import os
+import sys
+
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
+
 import unittest2
 
 

@@ -47,7 +47,9 @@ SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 __all__ = ['TestResult', 'TestCase', 'TestSuite',
            'TextTestRunner', 'TestLoader', 'FunctionTestCase', 'main',
            'defaultTestLoader', 'SkipTest', 'skip', 'skipIf', 'skipUnless',
-           'expectedFailure', 'TextTestResult']
+           'expectedFailure', 'TextTestResult', '__version__']
+
+__version__ = '0.1.0'
 
 # Expose obsolete functions for backwards compatibility
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])

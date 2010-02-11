@@ -26,7 +26,6 @@ class SkipTest(Exception):
     Usually you can use TestResult.skip() or one of the skipping decorators
     instead of raising this directly.
     """
-    pass
 
 class _ExpectedFailure(Exception):
     """
@@ -36,14 +35,14 @@ class _ExpectedFailure(Exception):
     """
 
     def __init__(self, exc_info):
-        super(_ExpectedFailure, self).__init__()
+        # can't use super because Python 2.4 exceptions are old style
+        Exception.__init__(self)
         self.exc_info = exc_info
 
 class _UnexpectedSuccess(Exception):
     """
     The test was supposed to fail, but it didn't!
     """
-    pass
 
 def _id(obj):
     return obj

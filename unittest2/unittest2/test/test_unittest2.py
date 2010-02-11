@@ -2068,21 +2068,24 @@ class Foo(unittest2.TestCase):
 class Bar(Foo):
     def test2(self): pass
 
-class LoggingTestCase(unittest2.TestCase):
-    """A test case which logs its calls."""
-
-    def __init__(self, events):
-        super(LoggingTestCase, self).__init__('test')
-        self.events = events
-
-    def setUp(self):
-        self.events.append('setUp')
-
-    def test(self):
-        self.events.append('test')
-
-    def tearDown(self):
-        self.events.append('tearDown')
+def GetLoggingTestCase():
+    "Removes LoggingTestCase from module scope."
+    class LoggingTestCase(unittest2.TestCase):
+        """A test case which logs its calls."""
+    
+        def __init__(self, events):
+            super(LoggingTestCase, self).__init__('test')
+            self.events = events
+    
+        def setUp(self):
+            self.events.append('setUp')
+    
+        def test(self):
+            self.events.append('test')
+    
+        def tearDown(self):
+            self.events.append('tearDown')
+    return LoggingTestCase
 
 class ResultWithNoStartTestRunStopTestRun(object):
     """An object honouring TestResult before startTestRun/stopTestRun."""
@@ -2209,7 +2212,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         events = []
         result = LoggingResult(events)
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def setUp(self):
                 super(Foo, self).setUp()
                 raise RuntimeError('raised by Foo.setUp')
@@ -2222,7 +2225,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
     def test_run_call_order__error_in_setUp_default_result(self):
         events = []
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def defaultTestResult(self):
                 return LoggingResult(self.events)
 
@@ -2246,7 +2249,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         events = []
         result = LoggingResult(events)
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def test(self):
                 super(Foo, self).test()
                 raise RuntimeError('raised by Foo.test')
@@ -2261,7 +2264,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
     def test_run_call_order__error_in_test_default_result(self):
         events = []
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def defaultTestResult(self):
                 return LoggingResult(self.events)
 
@@ -2285,7 +2288,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         events = []
         result = LoggingResult(events)
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def test(self):
                 super(Foo, self).test()
                 self.fail('raised by Foo.test')
@@ -2298,7 +2301,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
     # "When a test fails with a default result stopTestRun is still called."
     def test_run_call_order__failure_in_test_default_result(self):
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def defaultTestResult(self):
                 return LoggingResult(self.events)
             def test(self):
@@ -2322,7 +2325,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         events = []
         result = LoggingResult(events)
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def tearDown(self):
                 super(Foo, self).tearDown()
                 raise RuntimeError('raised by Foo.tearDown')
@@ -2335,7 +2338,7 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
     # "When tearDown errors with a default result stopTestRun is still called."
     def test_run_call_order__error_in_tearDown_default_result(self):
 
-        class Foo(LoggingTestCase):
+        class Foo(GetLoggingTestCase()):
             def defaultTestResult(self):
                 return LoggingResult(self.events)
             def tearDown(self):
@@ -2917,6 +2920,7 @@ test case
         self.failUnlessRaises(TypeError, lambda _: 3.14 + u'spam')
         self.failIf(False)
 
+    @unittest2.skipIf(sys.version_info[1] < 7, "Deepcopy test fails on Python < 2.7")
     def testDeepcopy(self):
         # Issue: 5660
         class TestableTest(unittest2.TestCase):
