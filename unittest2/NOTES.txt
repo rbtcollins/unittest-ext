@@ -16,3 +16,14 @@ and doing magic in __setitem__ and __getitem__.
 
 ``TestCase.longMessage`` defaults to True because it is better. It defaults to
 False in Python 2.7 for backwards compatibility reasons.
+
+
+CHANGELOG
+=========
+
+
+
+0.1
+---
+
+Initial release.
