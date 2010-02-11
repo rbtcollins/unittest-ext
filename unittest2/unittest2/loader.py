@@ -8,7 +8,7 @@ import types
 
 from fnmatch import fnmatch
 
-from . import case, suite
+from unittest2 import case, suite
 
 
 def _CmpToKey(mycmp):

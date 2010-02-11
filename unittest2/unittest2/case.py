@@ -7,7 +7,7 @@ import pprint
 import re
 import warnings
 
-from . import result, util
+from unittest2 import result, util
 
 
 class SkipTest(Exception):
