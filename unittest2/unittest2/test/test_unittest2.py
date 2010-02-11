@@ -3079,7 +3079,7 @@ class TestLongMessage(unittest2.TestCase):
         self.testableFalse = TestableTestFalse('testTest')
 
     def testDefault(self):
-        self.assertFalse(unittest2.TestCase.longMessage)
+        self.assertTrue(unittest2.TestCase.longMessage)
 
     def test_formatMsg(self):
         self.assertEquals(self.testableFalse._formatMessage(None, "foo"), "foo")
