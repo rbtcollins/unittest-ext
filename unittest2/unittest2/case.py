@@ -157,7 +157,7 @@ class TestCase(unittest.TestCase):
     # objects used in assert methods) will be printed on failure in *addition*
     # to any explicit message passed.
 
-    longMessage = False
+    longMessage = True
 
 
     def __init__(self, methodName='runTest'):

@@ -12,3 +12,7 @@ pickleable. This is solved in Python 2.7 with fixes to the deepcopy module.
 
 This is fixable by only storing names in the type equality function dictionary
 and doing magic in __setitem__ and __getitem__.
+
+
+``TestCase.longMessage`` defaults to True because it is better. It defaults to
+False in Python 2.7 for backwards compatibility reasons.

@@ -20,7 +20,36 @@ URL = 'http://pypi.python.org/pypi/unittest2'
 
 LONG_DESCRIPTION = """
 unittest2 is a backport of the new features added to the unittest testing
-framework in Python 2.7. It is tested to run on Python 2.4 - 2.6.""".strip()
+framework in Python 2.7. It is tested to run on Python 2.4 - 2.6.
+
+To use unittest2 instead of unittest simply replace ``import unittest`` with
+``import unittest2``.
+
+Classes in unittest2 derive from the equivalent classes in unittest, so it
+should be possible to use the unittest2 test running infrastructure without
+having to switch all your tests to using unittest2 immediately. Similarly
+you can use the new assert methods on ``unittest2.TestCase`` with the standard
+unittest test running infrastructure. Not all of the new features in unittest2
+will work with the standard unittest test loaders and runners however.
+
+New features include:
+
+* ``addCleanups`` - better resource management
+* *many* new assert methods including better defaults for comparing lists,
+  sets, dicts unicode strings etc and the ability to specify new default methods
+  for comparing specific types
+* ``assertRaises`` as context manager, with access to the exception afterwards 
+* test discovery and new command line options for ``python -m unittest2`` 
+* test skipping and expected failures * ``load_tests`` protocol for loading
+  tests from modules or packages 
+* ``startTestRun`` and ``stopTestRun`` methods on TestResult
+* various other API improvements and fixes
+
+Until I write proper documentation, the best information on all the new features
+is the development version of the Python documentation for Python 2.7:
+
+* http://docs.python.org/dev/library/unittest.html
+""".strip()
 
 CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
