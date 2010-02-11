@@ -2801,18 +2801,18 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         self.assertRaises(self.failureException, self.assertLessEqual, u'bug', 'ant')
 
     def testAssertMultiLineEqual(self):
-        sample_text = b"""\
+        sample_text = """\
 http://www.python.org/doc/2.3/lib/module-unittest.html
 test case
     A test case is the smallest unit of testing. [...]
 """
-        revised_sample_text = b"""\
+        revised_sample_text = """\
 http://www.python.org/doc/2.4.1/lib/module-unittest.html
 test case
     A test case is the smallest unit of testing. [...] You may provide your
     own implementation that does not subclass from TestCase, of course.
 """
-        sample_text_error = b"""
+        sample_text_error = """
 - http://www.python.org/doc/2.3/lib/module-unittest.html
 ?                             ^
 + http://www.python.org/doc/2.4.1/lib/module-unittest.html
@@ -2889,20 +2889,6 @@ test case
                 self.assertRaisesRegexp, Exception,
                 re.compile('^Expected$'), Stub)
 
-    def testAssertRaisesExcValue(self):
-        class ExceptionMock(Exception):
-            pass
-
-        def Stub(foo):
-            raise ExceptionMock(foo)
-        v = "particular value"
-
-        ctx = self.assertRaises(ExceptionMock)
-        with ctx:
-            Stub(v)
-        e = ctx.exception
-        self.assertIsInstance(e, ExceptionMock)
-        self.assertEqual(e.args[0], v)
 
     def testSynonymAssertMethodNames(self):
         """Test undocumented method name synonyms.
@@ -2994,10 +2980,12 @@ class Test_TestSkipping(unittest2.TestCase):
             self.assertTrue(result.wasSuccessful())
 
     def test_skip_class(self):
-        @unittest2.skip("testing")
         class Foo(unittest2.TestCase):
             def test_1(self):
                 record.append(1)
+        
+        # was originally a class decorator...
+        Foo = unittest2.skip("testing")(Foo)
         record = []
         result = unittest2.TestResult()
         test = Foo("test_1")
@@ -3062,47 +3050,6 @@ class Test_Assertions(unittest2.TestCase):
                           float('inf'), float('inf'))
 
 
-    def test_assertRaises(self):
-        def _raise(e):
-            raise e
-        self.assertRaises(KeyError, _raise, KeyError)
-        self.assertRaises(KeyError, _raise, KeyError("key"))
-        try:
-            self.assertRaises(KeyError, lambda: None)
-        except self.failureException as e:
-            self.assertIn("KeyError not raised", e.args)
-        else:
-            self.fail("assertRaises() didn't fail")
-        try:
-            self.assertRaises(KeyError, _raise, ValueError)
-        except ValueError:
-            pass
-        else:
-            self.fail("assertRaises() didn't let exception pass through")
-        with self.assertRaises(KeyError) as cm:
-            try:
-                raise KeyError
-            except Exception, e:
-                raise
-        self.assertIs(cm.exception, e)
-
-        with self.assertRaises(KeyError):
-            raise KeyError("key")
-        try:
-            with self.assertRaises(KeyError):
-                pass
-        except self.failureException as e:
-            self.assertIn("KeyError not raised", e.args)
-        else:
-            self.fail("assertRaises() didn't fail")
-        try:
-            with self.assertRaises(KeyError):
-                raise ValueError
-        except ValueError:
-            pass
-        else:
-            self.fail("assertRaises() didn't let exception pass through")
-
 
 class TestLongMessage(unittest2.TestCase):
     """Test that the individual asserts honour longMessage.
@@ -3153,10 +3100,10 @@ class TestLongMessage(unittest2.TestCase):
             if withMsg:
                 kwargs = {"msg": "oops"}
 
-            with self.assertRaisesRegexp(self.failureException,
-                                         expected_regexp=expected_regexp):
-                testMethod(*args, **kwargs)
-
+            self.assertRaisesRegexp(self.failureException, 
+                                    lambda: testMethod(*args, **kwargs),
+                                    expected_regexp=expected_regexp)
+            
     def testAssertTrue(self):
         self.assertMessages('assertTrue', (False,),
                             ["^False is not True$", "^oops$", "^False is not True$",
@@ -3538,8 +3485,9 @@ class TestDiscovery(unittest2.TestCase):
             # asserts are off
             return
 
-        with self.assertRaises(AssertionError):
-            loader._get_name_from_path('/bar/baz.py')
+        self.assertRaises(AssertionError,
+                          loader._get_name_from_path,
+                          '/bar/baz.py')
 
     def test_find_tests(self):
         loader = unittest2.TestLoader()
@@ -3664,8 +3612,9 @@ class TestDiscovery(unittest2.TestCase):
         self.addCleanup(restore_path)
 
         full_path = os.path.abspath(os.path.normpath('/foo'))
-        with self.assertRaises(ImportError):
-            loader.discover('/foo/bar', top_level_dir='/foo')
+        self.assertRaises(ImportError,
+                          loader.discover,
+                          '/foo/bar', top_level_dir='/foo')
 
         self.assertEqual(loader._top_level_dir, full_path)
         self.assertIn(full_path, sys.path)
@@ -3706,8 +3655,8 @@ class TestDiscovery(unittest2.TestCase):
         self.assertEqual(suite.countTestCases(), 1)
         test = list(list(suite)[0])[0] # extract test from suite
 
-        with self.assertRaises(ImportError):
-            test.test_this_does_not_exist()
+        self.assertRaises(ImportError,
+            lambda: test.test_this_does_not_exist())
 
     def test_command_line_handling_parseArgs(self):
         # Haha - take that uninstantiable class
@@ -3732,9 +3681,9 @@ class TestDiscovery(unittest2.TestCase):
         program = object.__new__(unittest2.TestProgram)
         program.usageExit = usageExit
 
-        with self.assertRaises(Stop):
+        self.assertRaises(Stop,
             # too many args
-            program._do_discovery(['one', 'two', 'three', 'four'])
+            lambda: program._do_discovery(['one', 'two', 'three', 'four']))
 
 
     def test_command_line_handling_do_discovery_calls_loader(self):

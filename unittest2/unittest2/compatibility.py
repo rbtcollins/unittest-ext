@@ -19,3 +19,10 @@ except NameError:
         new.sort()
         return new
 
+try:
+    enumerate
+except NameError:
+    def enumerate(iterable):
+        i = 0
+        for entry in iterable:
+            yield i, entry

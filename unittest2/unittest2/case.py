@@ -270,7 +270,7 @@ class TestCase(object):
             success = False
             try:
                 self.setUp()
-            except SkipTest as e:
+            except SkipTest, e:
                 result.addSkip(self, str(e))
             except Exception:
                 result.addError(self, sys.exc_info())
@@ -279,11 +279,11 @@ class TestCase(object):
                     testMethod()
                 except self.failureException:
                     result.addFailure(self, sys.exc_info())
-                except _ExpectedFailure as e:
+                except _ExpectedFailure, e:
                     result.addExpectedFailure(self, e.exc_info)
                 except _UnexpectedSuccess:
                     result.addUnexpectedSuccess(self)
-                except SkipTest as e:
+                except SkipTest, e:
                     result.addSkip(self, str(e))
                 except Exception:
                     result.addError(self, sys.exc_info())
