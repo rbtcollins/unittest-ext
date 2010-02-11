@@ -49,6 +49,8 @@ Until I write proper documentation, the best information on all the new features
 is the development version of the Python documentation for Python 2.7:
 
 * http://docs.python.org/dev/library/unittest.html
+
+Look for notes about features added or changed in Python 2.7.
 """.strip()
 
 CLASSIFIERS = [
