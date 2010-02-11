@@ -10,8 +10,7 @@ import os
 import re
 import sys
 from test import test_support
-import unittest
-from unittest import TestCase, TestProgram
+import unittest2
 import types
 from copy import deepcopy
 from cStringIO import StringIO
@@ -20,7 +19,7 @@ import pickle
 ### Support code
 ################################################################
 
-class LoggingResult(unittest.TestResult):
+class LoggingResult(unittest2.TestResult):
     def __init__(self, log):
         self._events = log
         super(LoggingResult, self).__init__()
