@@ -5,6 +5,7 @@ import re
 import sys
 import traceback
 import types
+import unittest
 
 from fnmatch import fnmatch
 
@@ -41,7 +42,7 @@ def _make_failed_import_test(name, suiteClass):
     return suiteClass((ModuleImportFailure(name),))
 
 
-class TestLoader(object):
+class TestLoader(unittest.TestLoader):
     """
     This class is responsible for loading tests according to various criteria
     and returning them wrapped in a TestSuite

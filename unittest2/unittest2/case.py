@@ -4,9 +4,11 @@ import sys
 import difflib
 import pprint
 import re
+import unittest
 import warnings
 
 from unittest2 import result, util
+from unittest2.compatibility import *
 
 try:
     from functools import wraps
@@ -107,7 +109,7 @@ class _AssertRaisesContext(object):
             except AttributeError:
                 exc_name = str(self.expected)
             raise self.failureException(
-                "{0} not raised".format(exc_name))
+                "%s not raised" % (exc_name,))
         if not issubclass(exc_type, self.expected):
             # let unexpected exceptions pass through
             return False
@@ -124,7 +126,7 @@ class _AssertRaisesContext(object):
         return True
 
 
-class TestCase(object):
+class TestCase(unittest.TestCase):
     """A class whose instances are single test cases.
 
     By default, the test code itself should be placed in a method named
@@ -504,7 +506,7 @@ class TestCase(object):
     def _deprecate(original_func):
         def deprecated_func(*args, **kwargs):
             warnings.warn(
-                'Please use {0} instead.'.format(original_func.__name__),
+                ('Please use %s instead.' % original_func.__name__),
                 PendingDeprecationWarning, 2)
             return original_func(*args, **kwargs)
         return deprecated_func
@@ -862,16 +864,18 @@ class TestCase(object):
         if callable_obj is None:
             return _AssertRaisesContext(expected_exception, self, expected_regexp)
         try:
-            callableObj(*args, **kwargs)
-        except excClass, exc_value:
+            callable_obj(*args, **kwargs)
+        except expected_exception, exc_value:
             if isinstance(expected_regexp, basestring):
                 expected_regexp = re.compile(expected_regexp)
             if not expected_regexp.search(str(exc_value)):
                 raise self.failureException('"%s" does not match "%s"' %
                          (expected_regexp.pattern, str(exc_value)))
         else:
-            if hasattr(excClass,'__name__'): excName = excClass.__name__
-            else: excName = str(excClass)
+            if hasattr(expected_exception, '__name__'): 
+                excName = expected_exception.__name__
+            else: 
+                excName = str(expected_exception)
             raise self.failureException, "%s not raised" % excName
 
 

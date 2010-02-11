@@ -2,10 +2,11 @@
 
 import traceback
 
+import unittest
 from unittest2 import util
 
 
-class TestResult(object):
+class TestResult(unittest.TestResult):
     """Holder for test result information.
 
     Test results are automatically managed by the TestCase and TestSuite

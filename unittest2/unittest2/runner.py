@@ -2,6 +2,7 @@
 
 import sys
 import time
+import unittest
 
 from unittest2 import result
 
@@ -78,7 +79,7 @@ class TextTestResult(result.TestResult):
     def addSkip(self, test, reason):
         super(TextTestResult, self).addSkip(test, reason)
         if self.showAll:
-            self.stream.writeln("skipped {0!r}".format(reason))
+            self.stream.writeln("skipped %r" % (reason,))
         elif self.dots:
             self.stream.write("s")
             self.stream.flush()
@@ -113,7 +114,7 @@ class TextTestResult(result.TestResult):
             self.stream.writeln("%s" % err)
 
 
-class TextTestRunner(object):
+class TextTestRunner(unittest.TextTestRunner):
     """A test runner class that displays results in textual form.
 
     It prints out the names of tests as they are run, errors as they

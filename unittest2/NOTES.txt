@@ -5,3 +5,8 @@ Differences
 ``assertSameElements`` does not silence Py3k warnings as this uses
 ``warnings.catch_warnings()`` which is new in Python 2.6 (and is used as a
 context manager which would be a pain to make work with Python 2.4).
+
+TestCase instances now have a dictionary of instance methods setup for the
+typeEquality functions. This means that TestCase instances are no longer
+pickleable. This is solved in Python 2.7 with fixes to the deepcopy module
+that are present in Python 2.6 onwards.

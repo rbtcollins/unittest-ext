@@ -1,10 +1,11 @@
 """TestSuite"""
 
+import unittest
 from unittest2 import case
 from unittest2 import util
 
 
-class TestSuite(object):
+class TestSuite(unittest.TestSuite):
     """A test suite is a composite test consisting of a number of TestCases.
 
     For use, create an instance of TestSuite, then add test case instances.
@@ -43,7 +44,7 @@ class TestSuite(object):
     def addTest(self, test):
         # sanity checks
         if not hasattr(test, '__call__'):
-            raise TypeError("{} is not callable".format(repr(test)))
+            raise TypeError("%r is not callable" % (test,))
         if isinstance(test, type) and issubclass(test,
                                                  (case.TestCase, TestSuite)):
             raise TypeError("TestCases and TestSuites must be instantiated "
