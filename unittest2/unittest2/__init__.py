@@ -47,20 +47,25 @@ SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 __all__ = ['TestResult', 'TestCase', 'TestSuite',
            'TextTestRunner', 'TestLoader', 'FunctionTestCase', 'main',
            'defaultTestLoader', 'SkipTest', 'skip', 'skipIf', 'skipUnless',
-           'expectedFailure']
+           'expectedFailure', 'TextTestResult']
 
 # Expose obsolete functions for backwards compatibility
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])
+__all__.append('_TextTestResult')
 
 
-from .result import TestResult
-from .case import (TestCase, FunctionTestCase, SkipTest, skip, skipIf,
-                   skipUnless, expectedFailure)
-from .suite import TestSuite
-from .loader import (TestLoader, defaultTestLoader, makeSuite, getTestCaseNames,
-                     findTestCases)
-from .main import TestProgram, main
-from .runner import TextTestRunner, TextTestResult
+from unittest2.result import TestResult
+from unittest2.case import (
+    TestCase, FunctionTestCase, SkipTest, skip, skipIf,
+    skipUnless, expectedFailure
+)
+from unittest2.suite import TestSuite
+from unittest2.loader import (
+    TestLoader, defaultTestLoader, makeSuite, getTestCaseNames,
+    findTestCases
+)
+from unittest2.main import TestProgram, main
+from unittest2.runner import TextTestRunner, TextTestResult
 
 # deprecated
 _TextTestResult = TextTestResult
