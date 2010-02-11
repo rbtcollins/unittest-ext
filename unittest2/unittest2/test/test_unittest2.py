@@ -3100,9 +3100,9 @@ class TestLongMessage(unittest2.TestCase):
             if withMsg:
                 kwargs = {"msg": "oops"}
 
-            self.assertRaisesRegexp(self.failureException, 
-                                    lambda: testMethod(*args, **kwargs),
-                                    expected_regexp=expected_regexp)
+            self.assertRaisesRegexp(self.failureException,
+                                    expected_regexp,
+                                    lambda: testMethod(*args, **kwargs))
             
     def testAssertTrue(self):
         self.assertMessages('assertTrue', (False,),
