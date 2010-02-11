@@ -68,7 +68,7 @@ class TestLoader(unittest.TestLoader):
         tests = []
         for name in dir(module):
             obj = getattr(module, name)
-            if isinstance(obj, type) and issubclass(obj, case.TestCase):
+            if isinstance(obj, type) and issubclass(obj, unittest.TestCase):
                 tests.append(self.loadTestsFromTestCase(obj))
 
         load_tests = getattr(module, 'load_tests', None)
@@ -104,19 +104,19 @@ class TestLoader(unittest.TestLoader):
 
         if isinstance(obj, types.ModuleType):
             return self.loadTestsFromModule(obj)
-        elif isinstance(obj, type) and issubclass(obj, case.TestCase):
+        elif isinstance(obj, type) and issubclass(obj, unittest.TestCase):
             return self.loadTestsFromTestCase(obj)
         elif (isinstance(obj, types.UnboundMethodType) and
               isinstance(parent, type) and
               issubclass(parent, case.TestCase)):
             return self.suiteClass([parent(obj.__name__)])
-        elif isinstance(obj, suite.TestSuite):
+        elif isinstance(obj, unittest.TestSuite):
             return obj
         elif hasattr(obj, '__call__'):
             test = obj()
-            if isinstance(test, suite.TestSuite):
+            if isinstance(test, unittest.TestSuite):
                 return test
-            elif isinstance(test, case.TestCase):
+            elif isinstance(test, unittest.TestCase):
                 return self.suiteClass([test])
             else:
                 raise TypeError("calling %s returned %s, not a test" %

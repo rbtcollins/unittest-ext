@@ -46,7 +46,7 @@ class TestSuite(unittest.TestSuite):
         if not hasattr(test, '__call__'):
             raise TypeError("%r is not callable" % (test,))
         if isinstance(test, type) and issubclass(test,
-                                                 (case.TestCase, TestSuite)):
+                                                 (unittest.TestCase, unittest.TestSuite)):
             raise TypeError("TestCases and TestSuites must be instantiated "
                             "before passing them to addTest()")
         self._tests.append(test)
