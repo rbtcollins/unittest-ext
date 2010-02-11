@@ -1,7 +1,7 @@
 """TestSuite"""
 
-from . import case
-from . import util
+from unittest2 import case
+from unittest2 import util
 
 
 class TestSuite(object):

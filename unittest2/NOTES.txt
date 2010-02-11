@@ -1,0 +1,7 @@
+
+Differences
+===========
+
+``assertSameElements`` does not silence Py3k warnings as this uses
+``warnings.catch_warnings()`` which is new in Python 2.6 (and is used as a
+context manager which would be a pain to make work with Python 2.4).

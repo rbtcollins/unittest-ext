@@ -3,7 +3,7 @@
 import sys
 import time
 
-from . import result
+from unittest2 import result
 
 
 class _WritelnDecorator(object):

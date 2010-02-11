@@ -1,13 +1,20 @@
 """Test case implementation"""
 
 import sys
-import functools
 import difflib
 import pprint
 import re
 import warnings
 
 from unittest2 import result, util
+
+try:
+    from functools import wraps
+except ImportError:
+    def wraps(_):
+        def _wraps(func):
+            return func
+        return _wraps
 
 
 class SkipTest(Exception):
@@ -48,7 +55,7 @@ def skip(reason):
             test_item.__unittest_skip__ = True
             test_item.__unittest_skip_why__ = reason
             return test_item
-        @functools.wraps(test_item)
+        @wraps(test_item)
         def skip_wrapper(*args, **kwargs):
             raise SkipTest(reason)
         return skip_wrapper
@@ -72,7 +79,7 @@ def skipUnless(condition, reason):
 
 
 def expectedFailure(func):
-    @functools.wraps(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             func(*args, **kwargs)
@@ -390,11 +397,16 @@ class TestCase(object):
                the_exception = cm.exception
                self.assertEqual(the_exception.error_code, 3)
         """
-        context = _AssertRaisesContext(excClass, self)
         if callableObj is None:
-            return context
-        with context:
+            return _AssertRaisesContext(excClass, self)
+        try:
             callableObj(*args, **kwargs)
+        except excClass:
+            return
+        else:
+            if hasattr(excClass,'__name__'): excName = excClass.__name__
+            else: excName = str(excClass)
+            raise self.failureException, "%s not raised" % excName
 
     def _getAssertEqualityFunc(self, first, second):
         """Get a detailed comparison function for the types of the two args.
@@ -754,15 +766,17 @@ class TestCase(object):
             # not hashable.
             expected = list(expected_seq)
             actual = list(actual_seq)
+            """
             with warnings.catch_warnings():
                 if sys.py3kwarning:
                     # Silence Py3k warning
                     warnings.filterwarnings("ignore",
                                             "dict inequality comparisons "
                                             "not supported", DeprecationWarning)
-                expected.sort()
-                actual.sort()
-                missing, unexpected = util.sorted_list_difference(expected, actual)
+            """
+            expected.sort()
+            actual.sort()
+            missing, unexpected = util.sorted_list_difference(expected, actual)
         errors = []
         if missing:
             errors.append('Expected, but missing:\n    %r' % missing)
@@ -845,11 +859,21 @@ class TestCase(object):
             args: Extra args.
             kwargs: Extra kwargs.
         """
-        context = _AssertRaisesContext(expected_exception, self, expected_regexp)
         if callable_obj is None:
-            return context
-        with context:
-            callable_obj(*args, **kwargs)
+            return _AssertRaisesContext(expected_exception, self, expected_regexp)
+        try:
+            callableObj(*args, **kwargs)
+        except excClass, exc_value:
+            if isinstance(expected_regexp, basestring):
+                expected_regexp = re.compile(expected_regexp)
+            if not expected_regexp.search(str(exc_value)):
+                raise self.failureException('"%s" does not match "%s"' %
+                         (expected_regexp.pattern, str(exc_value)))
+        else:
+            if hasattr(excClass,'__name__'): excName = excClass.__name__
+            else: excName = str(excClass)
+            raise self.failureException, "%s not raised" % excName
+
 
     def assertRegexpMatches(self, text, expected_regexp, msg=None):
         if isinstance(expected_regexp, basestring):
