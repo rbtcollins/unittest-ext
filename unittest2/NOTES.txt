@@ -1,3 +1,5 @@
+Can't be backported to Python 2.3 as it uses decorators.
+
 
 Differences
 ===========
@@ -14,7 +16,7 @@ be deep-copyable on Python versions prior to 2.7.
 False in Python 2.7 for backwards compatibility reasons.
 
 ``python -m package`` doesn't work until Python 2.7, to provide the command line
-features a ``unit2.py`` script is provided instead.
+features a ``unit2`` (and ``unit2.py``) script is provided instead.
 
 
 CHANGELOG

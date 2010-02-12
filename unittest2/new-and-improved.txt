@@ -10,6 +10,9 @@
 Introduction
 ============
 
+
+
+
 he proposal is on the new features that have been added to the Python `unittest module <http://docs.python.org/library/unittest.html>`_ in recent months. ``unittest`` is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
 
 Until sometime after Python 2.6 was released ``unittest`` was stable to the point of rigor mortis, but several developers have been working on adding much needed features and some of the most successful concepts (like test discovery) from the other major Python test frameworks. These changes will arrive in Python 2.7 and 3.2 (although a *few* of them made it into Python 3.1).
@@ -50,31 +53,79 @@ Type Specific Equality
   - ``assertTupleEqual``
   - ``assertSequenceEqual``
   - ``addTypeEqualityFunc``
-      
+
+
+assertRaises
+============
 * New ``assertRaises`` behavior
 
   - Acts as a context manager
   - Keeps exception instance as context attribute
   - ``assertRaisesRegexp``
+
       
+Command Line Behaviour
+======================
+
 * New command line behavior
 
   - New exit and verbosity parameters to main
   - ``python -m unittest foo``
+
+The unittest module can be used from the command line to run tests from modules, classes or even individual test methods:
+
+python -m unittest test_module1 test_module2
+python -m unittest test_module.TestClass
+python -m unittest test_module.TestClass.test_method
+
+You can pass in a list with any combination of module names, and fully qualified class or method names.
+
+You can run tests with more detail (higher verbosity) by passing in the -v flag:
+
+python -m unittest -v test_module
+
+For a list of all the command line options:
+
+python -m unittest -h
+
+Changed in version 2.7: In earlier versions it was only possible to run individual test methods and not modules or classes.
+
+The command line can also be used for test discovery, for running all of the tests in a project or just a subset.
+
+ 
+Test Discovery
+==============
+
   - Test discovery (``python -m unittest discover``)
   - The ``load_tests`` protocol
   - The `discover <http://pypi.python.org/pypi/discover>`_ module
 
+addCleanup
+==========
+
+Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends. (FIFO)
+
 * Better resource handling with ``addCleanup``
-* Better messages with the ``longMessage`` class attribute
+
+Test Skipping and Expected Failures
+===================================
+
 * Test skipping
+
+Minor Changes
+=============
+
+* Better messages with the ``longMessage`` class attribute
 * ``TestResult``: ``startTestRun`` and ``stopTestRun`` 
-* The ``unittestbp`` package (back-port to Python 2.4 of the changes)
-* The way forward (perhaps...)
 
-  - generational and parameterized tests
-  - shared fixtures
-  - doctest integration
-  - test outcomes (mentioning the vision of `Robert Collins <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_)
+The unittest2 Package
+=====================
 
-Of course, if you want to know more you'll have to come to the talk (assuming it gets accepted) or wait until I write it up in more detail. That second part *will* happen, but I wouldn't hold your breath waiting for it... In the meantime the changes are all documented so you can read about them in the `development documentation for unittest <http://docs.python.org/dev/library/unittest.html>`_.
+* The ``unittest2`` package (back-port to Python 2.4 of the changes)
+
+The Future
+==========
+
+* classSetUp / classTearDown and moduleSetUp / moduleTearDown - shared fixtures 
+* parameterized tests
+* test outcomes (`Robert Collins <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_)
