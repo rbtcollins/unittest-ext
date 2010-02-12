@@ -13,6 +13,7 @@ from unittest2.compatibility import *
 try:
     from functools import wraps
 except ImportError:
+    # only needed for Python 2.4
     def wraps(_):
         def _wraps(func):
             return func
