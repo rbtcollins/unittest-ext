@@ -208,13 +208,43 @@ Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point 
     If you want to manually clear out the cleanup stack you can call ``doCleanups()``.
     
     Exceptions raises inside cleanup functions will cause the test to fail, but all cleanup functions will still run.
+
+
+Test Skipping
+=============
+
+Decorators that work as class or method decorators for conditionally or unconditionally skipping tests::
+
+    @skip("skip this test")
+    def testMethod(self):
+        ...
     
+    @skipIf(sys.version_info[2] < 5, "only works on Python 2.5+")
+    def testMethod(self):
+        ...
+        
+    @skipUnless(sys.version_info[2] < 5, "only needed on Python < 2.5")
+    def testMethod(self):
+        ...
 
+More Skipping
+=============
 
-Test Skipping and Expected Failures
-===================================
+::
 
-* Test skipping
+    def testMethod(self):
+        self.skip("skip, skippety skip")
+    
+    def testMethod(self):
+        raise SkipException("whoops, time to skip")
+
+    @expectedFailure
+    def testThatFails(self):
+        self.fail('this *should* fail')
+
+.. class:: handout
+
+    Ok, so ``expectedFailure`` isn't for skipping tests. You use it when 
 
 Minor Changes
 =============
