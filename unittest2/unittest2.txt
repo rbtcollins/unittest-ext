@@ -244,7 +244,7 @@ More Skipping
 
 .. class:: handout
 
-    Ok, so ``expectedFailure`` isn't for skipping tests. You use it when 
+    Ok, so ``expectedFailure`` isn't for skipping tests. You use it for test that are known to fail currently. If you fix the problem, so the test starts to pass, then it will be reported as an unexpected success. This will remind you to go back and remove the expectedFailure decorator. 
 
 Minor Changes
 =============
