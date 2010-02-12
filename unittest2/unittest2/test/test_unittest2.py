@@ -2920,7 +2920,6 @@ test case
         self.failUnlessRaises(TypeError, lambda _: 3.14 + u'spam')
         self.failIf(False)
 
-    @unittest2.skipIf(sys.version_info[1] < 7, "Deepcopy test fails on Python < 2.7")
     def testDeepcopy(self):
         # Issue: 5660
         class TestableTest(unittest2.TestCase):

@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # setup.py
 # Install script for unittest2
 # Copyright (C) 2010 Michael Foord
@@ -13,7 +14,7 @@ from unittest2 import __version__ as VERSION
 NAME = 'unittest2'
 
 PACKAGES = ['unittest2', 'unittest2.test']
-SCRIPTS = ['unit2.py']
+SCRIPTS = ['unit2.py', 'unit2']
 
 DESCRIPTION = 'The new features in unittest for Python 2.7 backported to Python 2.4+.'
 
@@ -40,11 +41,30 @@ New features include:
   sets, dicts unicode strings etc and the ability to specify new default methods
   for comparing specific types
 * ``assertRaises`` as context manager, with access to the exception afterwards 
-* test discovery and new command line options for ``python -m unittest2`` 
+* test discovery and new command line options 
 * test skipping and expected failures * ``load_tests`` protocol for loading
   tests from modules or packages 
 * ``startTestRun`` and ``stopTestRun`` methods on TestResult
 * various other API improvements and fixes
+
+.. note::
+
+    In Python 2.7 you invoke the unittest command line features (including test
+    discover) with ``python -m unittest <args>``. As unittest is a package, and
+    the ability to invoke packages with ``python -m ...`` is new in Python 2.7,
+    we can't do this for unittest2.
+    
+    Instead unittest2 comes with a script ``unit2`. `Command line usage 
+    <http://docs.python.org/dev/library/unittest.html#command-line-interface>`_
+    ::
+    
+        unit2 discover
+        unit2 -v test_module
+    
+    There is also a copy of this script called ``unit2.py``, useful for Windows
+    which uses file-extensions rather than shebang lines to determine what
+    program to execute files with. Both of these scripts are installed by
+    distutils.
 
 Until I write proper documentation, the best information on all the new features
 is the development version of the Python documentation for Python 2.7:
@@ -52,6 +72,10 @@ is the development version of the Python documentation for Python 2.7:
 * http://docs.python.org/dev/library/unittest.html
 
 Look for notes about features added or changed in Python 2.7.
+
+unittest2 is maintained in an SVN repository courtesy of google code:
+
+* http://code.google.com/p/unittest-ext/source/browse/#svn/trunk/unittest2
 """.strip()
 
 CLASSIFIERS = [

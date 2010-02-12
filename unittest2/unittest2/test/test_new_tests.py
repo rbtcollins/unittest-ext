@@ -17,7 +17,9 @@ class TestUnittest(unittest2.TestCase):
         self.assertIsSubclass(unittest2.TestCase, unittest.TestCase)
         self.assertIsSubclass(unittest2.TestResult, unittest.TestResult)
         self.assertIsSubclass(unittest2.TestSuite, unittest.TestSuite)
-        
+        self.assertIsSubclass(unittest2.TextTestRunner, unittest.TextTestRunner)
+        self.assertIsSubclass(unittest2.TestLoader, unittest.TestLoader)
+        self.assertIsSubclass(unittest2.TextTestResult, unittest.TestResult)
         
         
 if __name__ == '__main__':
