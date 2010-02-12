@@ -13,6 +13,7 @@ from unittest2 import __version__ as VERSION
 NAME = 'unittest2'
 
 PACKAGES = ['unittest2', 'unittest2.test']
+SCRIPTS = ['unit2.py']
 
 DESCRIPTION = 'The new features in unittest for Python 2.7 backported to Python 2.4+.'
 
@@ -81,6 +82,7 @@ setup(name=NAME,
       long_description=LONG_DESCRIPTION,
 #      download_url=DOWNLOAD_URL,,
       packages=PACKAGES,
+      scripts=SCRIPTS,
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       url=URL,

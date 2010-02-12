@@ -1,30 +1,12 @@
 """
-Python unit testing framework, based on Erich Gamma's JUnit and Kent Beck's
-Smalltalk testing framework.
+unittest2
 
-This module contains the core framework classes that form the basis of
-specific test cases and suites (TestCase, TestSuite etc.), and also a
-text-based utility class for running the tests and reporting the results
- (TextTestRunner).
+unittest2 is a backport of the new features added to the unittest testing
+framework in Python 2.7. It is tested to run on Python 2.4 - 2.6.
 
-Simple usage:
+To use unittest2 instead of unittest simply replace ``import unittest`` with
+``import unittest2``.
 
-    import unittest
-
-    class IntegerArithmenticTestCase(unittest.TestCase):
-        def testAdd(self):  ## test method names begin 'test*'
-            self.assertEqual((1 + 2), 3)
-            self.assertEqual(0 + 1, 1)
-        def testMultiply(self):
-            self.assertEqual((0 * 10), 0)
-            self.assertEqual((5 * 8), 40)
-
-    if __name__ == '__main__':
-        unittest.main()
-
-Further information is available in the bundled documentation, and from
-
-  http://docs.python.org/library/unittest.html
 
 Copyright (c) 1999-2003 Steve Purcell
 Copyright (c) 2003-2010 Python Software Foundation
@@ -49,7 +31,7 @@ __all__ = ['TestResult', 'TestCase', 'TestSuite',
            'defaultTestLoader', 'SkipTest', 'skip', 'skipIf', 'skipUnless',
            'expectedFailure', 'TextTestResult', '__version__']
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 # Expose obsolete functions for backwards compatibility
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])

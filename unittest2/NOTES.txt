@@ -17,6 +17,9 @@ and doing magic in __setitem__ and __getitem__.
 ``TestCase.longMessage`` defaults to True because it is better. It defaults to
 False in Python 2.7 for backwards compatibility reasons.
 
+``python -m package`` doesn't work until Python 2.7, to provide the command line
+features a ``unit2.py`` script is provided instead.
+
 
 CHANGELOG
 =========
