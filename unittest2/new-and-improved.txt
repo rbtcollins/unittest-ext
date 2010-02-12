@@ -5,100 +5,204 @@
  Coming changes to unittest
 ----------------------------
 
-.. contents::
+.. include:: <s5defs.txt>
+.. footer:: Michael Foord 2010
 
+| Michael Foord
+| michael@voidspace.org.uk
+| **www.voidspace.org.uk**
+
+.. image:: images/python.gif
+    :align: right
+
+
+.. contents:: New *and* improved: Coming changes to unittest
+   :class: handout
+   
+   
 Introduction
 ============
 
-
-
-
-he proposal is on the new features that have been added to the Python `unittest module <http://docs.python.org/library/unittest.html>`_ in recent months. ``unittest`` is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
+`unittest module <http://docs.python.org/library/unittest.html>`_ is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
 
 Until sometime after Python 2.6 was released ``unittest`` was stable to the point of rigor mortis, but several developers have been working on adding much needed features and some of the most successful concepts (like test discovery) from the other major Python test frameworks. These changes will arrive in Python 2.7 and 3.2 (although a *few* of them made it into Python 3.1).
-
-Putting together the list of changes since Python 2.6 for the talk made me realise just how much has changed. Here's an overview of the most important changes from the talk description:
 
 
 New Assert Methods
 ==================
 
+.. class:: handout
 
-* Brief introduction to ``unittest``, its past and its present
-* New assert methods
-
-  - ``assertGreater`` / ``assertLess`` etc
-  - ``assertRegexpMatches``
-  - ``assertIn`` / ``assertNotIn``
-  - ``assertNone`` / ``assertNotNone``
-  - ``assertIs`` / ``assertIsNot``
-  - ``assertIsInstance`` / ``assertNotIsInstance``
-  - ``assertSameElements``
-  - ``assertDictContainsSubset``
-  - Deprecated methods (``failIf`` / ``failUnless`` variants and ``assertEquals``)
+    The point of assertion methods in unittest is to provide useful messages on failure and to provide ready made methods for common assertions. Many of these were contributed by google or are in common use in other unittest extensions.
+    
+* ``assertGreater`` / ``assertLess`` / ``assertGreaterEqual`` / ``assertLessEqual``
+* ``assertRegexpMatches(text, regext)`` - verifies that regexp search matches text
+* ``assertIn(value, sequence)`` / ``assertNotIn`` - verifies the provided value is a member of the provided sequence
+* ``assertIsNone`` / ``assertIsNotNone`` - assert a value is None
+* ``assertIs(first, second)`` / ``assertIsNot`` - assert that first and second are the same object (identity)
+* ``assertIsInstance`` / ``assertNotIsInstance``
+* ``assertDictContainsSubset(subset, full)`` - Tests whether the key/value pairs in dictionary full are a superset of those in superset.
+* ``assertSequenceEqual(actual, expected)`` - ignores type but checks members are the same
+* ``assertSameElements(actual, expected)`` - ignores order and duplicates
+  
   
 Deprecations
 ============
+
+``unittest`` used to have lots of ways of spelling the same methods. The duplicates have now been deprecated:
+
+* ``assert_`` -> use ``assertTrue`` instead
+* ``fail*`` -> use ``assert*`` instead
+* ``assertEquals`` -> ``assertEqual`` is the one true way
+
+New assertion methods *don't* have a ``fail...`` alias as well. If you preferred the ``fail*`` variant, tough luck.
+
+.. class:: handout
+
+    Not all the 'deprecated' methods issue a ``PendingDeprecationWarning`` when used. ``assertEquals`` and ``assert_`` are too widely used for official deprecations, but they're deprecated in the documentation.
+    
+    In the next version of the documentation the deprecated methods will be expunged and relegated to a 'deprecated methods' section.
+    
+    Methods that have deprecation warnings are: 
+    
+        failUnlessEqual, failIfEqual, failUnlessAlmostEqual, failIfAlmostEqual, failUnless, failUnlessRaises, failIf
 
 
 Type Specific Equality
 ======================  
 
-* New type specific equality functions
+More useful failure messages when comparing specific types. Delegated to by ``assertEqual`` when you compare objects of the same (known) type:
 
-  - ``assertMultilineEqual``   - better string comparison
-  - ``assertSetEqual``
-  - ``assertDictEqual``
-  - ``assertListEqual``
-  - ``assertTupleEqual``
-  - ``assertSequenceEqual``
-  - ``addTypeEqualityFunc``
+* ``assertMultilineEqual``   - uses `difflib <http://docs.python.org/library/difflib.html>`_, default for comparing unicode strings
+* ``assertSetEqual`` - default for comparing sets
+* ``assertDictEqual``
+* ``assertListEqual``
+* ``assertTupleEqual``
+
+Setup new default comparison functions with:
+
+* ``addTypeEqualityFunc(type, function)``
 
 
 assertRaises
 ============
-* New ``assertRaises`` behavior
 
-  - Acts as a context manager
-  - Keeps exception instance as context attribute
-  - ``assertRaisesRegexp``
+As context manager::
+
+    with self.assertRaises(TypeError):
+        add(2, '3')
+
+Testing the message with a regular expression:
+
+    with self.assertRaisesRegexp(FooBarError, '^You shouldn't Foo a Bar$'):
+        foo_the_bar()
+
+Access to the exception object:
+
+    with self.assertRaises(TypeError) as cm:
+        do_something()
+    
+    exception = cm.exception
+    self.assertEqual(exception.error_code, 3)
 
       
 Command Line Behaviour
 ======================
 
-* New command line behavior
+::
 
-  - New exit and verbosity parameters to main
-  - ``python -m unittest foo``
+    python -m unittest test_module1 test_module2
+    python -m unittest test_module.TestClass
+    python -m unittest test_module.TestClass.test_method
 
-The unittest module can be used from the command line to run tests from modules, classes or even individual test methods:
+.. class:: handout
 
-python -m unittest test_module1 test_module2
-python -m unittest test_module.TestClass
-python -m unittest test_module.TestClass.test_method
+    The unittest module can be used from the command line to run tests from modules, classes or even individual test methods. In earlier versions it was only possible to run individual test methods and not modules or classes.
+    
+    If you are running tests for a whole test module and you define a ``load_tests`` function, then this function will be called to create the ``TestSuite`` for the module. This is the load_tests protocol.
+    
+    You can run tests with more detail (higher verbosity) by passing in the -v flag::
 
-You can pass in a list with any combination of module names, and fully qualified class or method names.
+        python -m unittest -v test_module
 
-You can run tests with more detail (higher verbosity) by passing in the -v flag:
+    For a list of all the command line options::
 
-python -m unittest -v test_module
+        python -m unittest -h
 
-For a list of all the command line options:
+New arguments to the ``main()`` function::
 
-python -m unittest -h
+    main(exit=False, verbosity=2)
+    
+.. class:: handout 
 
-Changed in version 2.7: In earlier versions it was only possible to run individual test methods and not modules or classes.
+    ``exit`` and ``verbosity`` parameters are new. By default ``main()`` calls ``sys.exit()`` when it has finished the test run. This is annoying if you are using it from the interactive interpreter. You can now switch that off and run tests with a higher than default verbosity (equivalent of the ``-v`` command line option).
+    
+    For use from the interactive interpreter you can do::
+    
+        >>> from unittest import main
+        >>> main(module='test_module', exit=False)
 
-The command line can also be used for test discovery, for running all of the tests in a project or just a subset.
+    The command line can also be used for test discovery, for running all of the tests in a project or just a subset.
 
- 
+
 Test Discovery
 ==============
 
-  - Test discovery (``python -m unittest discover``)
-  - The ``load_tests`` protocol
-  - The `discover <http://pypi.python.org/pypi/discover>`_ module
+Test discovery has been missing from unittest for a long time, forcing everyone to write their own test discovery / collection system.
+
+::
+
+    python -m unittest discover
+
+
+load_tests
+==========
+
+Modules or packages can customize how tests are loaded from them during normal test runs or test discovery by implementing a function called load_tests.
+
+If a test module defines load_tests it will be called by TestLoader.loadTestsFromModule() with the following arguments:
+
+load_tests(loader, standard_tests, None)
+
+It should return a TestSuite.
+
+loader is the instance of TestLoader doing the loading. standard_tests are the tests that would be loaded by default from the module. It is common for test modules to only want to add or remove tests from the standard set of tests. The third argument is used when loading packages as part of test discovery.
+
+A typical load_tests function that loads tests from a specific set of TestCase classes may look like:
+
+test_cases = (TestCase1, TestCase2, TestCase3)
+
+def load_tests(loader, tests, pattern):
+    suite = TestSuite()
+    for test_class in test_cases:
+        tests = loader.loadTestsFromTestCase(test_class)
+        suite.addTests(tests)
+    return suite
+
+If discovery is started, either from the command line or by calling TestLoader.discover(), with a pattern that matches a package name then the package __init__.py will be checked for load_tests.
+
+Note
+
+The default pattern is ‘test*.py’. This matches all Python files that start with ‘test’ but won’t match any test directories.
+
+A pattern like ‘test*’ will match test packages as well as modules.
+
+If the package __init__.py defines load_tests then it will be called and discovery not continued into the package. load_tests is called with the following arguments:
+
+load_tests(loader, standard_tests, pattern)
+
+This should return a TestSuite representing all the tests from the package. (standard_tests will only contain tests collected from __init__.py.)
+
+Because the pattern is passed into load_tests the package is free to continue (and potentially modify) test discovery. A ‘do nothing’ load_tests function for a test package would look like:
+
+def load_tests(loader, standard_tests, pattern):
+    # top level directory cached on loader instance
+    this_dir = os.path.dirname(__file__)
+    package_tests = loader.discover(start_dir=this_dir, pattern=pattern)
+    standard_tests.addTests(package_tests)
+    return standard_tests
+
+
 
 addCleanup
 ==========
@@ -117,6 +221,8 @@ Minor Changes
 
 * Better messages with the ``longMessage`` class attribute
 * ``TestResult``: ``startTestRun`` and ``stopTestRun`` 
+* TextTestResult public and the TextTestRunner takes a runnerclass argument for providing a custom result class (you used to have to subclass TextTestRunner and override _makeResult)
+* TextTestResult adds the test name to the test description even if you provide a docstring
 
 The unittest2 Package
 =====================
