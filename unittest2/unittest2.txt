@@ -12,8 +12,7 @@
 | michael@voidspace.org.uk
 | **www.voidspace.org.uk**
 
-.. image:: images/python.gif
-    :align: right
+*If it isn't tested it doesn't work.* -- *If you write applications without tests then you are a bad person, incapable of love.*
 
 
 .. contents:: New *and* improved: Coming changes to unittest
@@ -155,61 +154,62 @@ Test discovery has been missing from unittest for a long time, forcing everyone 
     python -m unittest discover
 
 
+The ``discover`` sub-command has the following options:
+
+   -v, --verbose    Verbose output
+   -s directory     Directory to start discovery ('.' default)
+   -p pattern       Pattern to match test files ('test*.py' default)
+   -t directory     Top level directory of project (default to
+                    start directory)
+
+.. class:: handout
+
+    
+    The -s, -p, & -t options can be passsed in as positional arguments. The
+    following two command lines are equivalent::
+
+       python -m unittest discover -s project_directory -p '*_test.py'
+       python -m unittest discover project_directory '*_test.py'
+
+
 load_tests
 ==========
 
-Modules or packages can customize how tests are loaded from them during normal test runs or test discovery by implementing a function called load_tests.
+If a test module defines a ``load_tests`` function, that will be called to create the test suite for the module.
 
-If a test module defines load_tests it will be called by TestLoader.loadTestsFromModule() with the following arguments:
+This example just uses one specific TestCase::
 
-load_tests(loader, standard_tests, None)
+    def load_tests(loader, tests, pattern):
+        suite = unittest.TestSuite()
+        case = loader.loadTestsFromTestCase(TestCase)
+        suite.addTests(case)
+        return suite
 
-It should return a TestSuite.
+.. class:: handout
 
-loader is the instance of TestLoader doing the loading. standard_tests are the tests that would be loaded by default from the module. It is common for test modules to only want to add or remove tests from the standard set of tests. The third argument is used when loading packages as part of test discovery.
-
-A typical load_tests function that loads tests from a specific set of TestCase classes may look like:
-
-test_cases = (TestCase1, TestCase2, TestCase3)
-
-def load_tests(loader, tests, pattern):
-    suite = TestSuite()
-    for test_class in test_cases:
-        tests = loader.loadTestsFromTestCase(test_class)
-        suite.addTests(tests)
-    return suite
-
-If discovery is started, either from the command line or by calling TestLoader.discover(), with a pattern that matches a package name then the package __init__.py will be checked for load_tests.
-
-Note
-
-The default pattern is ‘test*.py’. This matches all Python files that start with ‘test’ but won’t match any test directories.
-
-A pattern like ‘test*’ will match test packages as well as modules.
-
-If the package __init__.py defines load_tests then it will be called and discovery not continued into the package. load_tests is called with the following arguments:
-
-load_tests(loader, standard_tests, pattern)
-
-This should return a TestSuite representing all the tests from the package. (standard_tests will only contain tests collected from __init__.py.)
-
-Because the pattern is passed into load_tests the package is free to continue (and potentially modify) test discovery. A ‘do nothing’ load_tests function for a test package would look like:
-
-def load_tests(loader, standard_tests, pattern):
-    # top level directory cached on loader instance
-    this_dir = os.path.dirname(__file__)
-    package_tests = loader.discover(start_dir=this_dir, pattern=pattern)
-    standard_tests.addTests(package_tests)
-    return standard_tests
-
+    The ``tests`` argument is the standard tests that would be loaded from the module by default as a TestSuite. If you just want to add extra tests you can just call ``addTests`` on this. ``pattern`` is only used in the ``__init__.py`` of test packages when loaded from test discovery. This allows the ``load_tests`` function to continue (and customize) test discovery into the package. In standard test modules ``pattern`` will be None.
 
 
 addCleanup
 ==========
 
-Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends. (FIFO)
+Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends (LIFO).
 
-* Better resource handling with ``addCleanup``
+    def testMethod(self):
+        temp_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_dir)
+
+.. class:: handout
+    
+    The full signature for addCleanup is: ``addCleanup(function, *args, **kwargs)``. Any additional args or keyword arguments will be passed into the cleanup function when it is called. It saves the need for nested ``try:..finally:`` blocks to undo actions performed by the test.
+    
+    If ``setUp()`` fails, meaning that ``tearDown()`` is not called, then any cleanup functions added will still be called.
+    
+    If you want to manually clear out the cleanup stack you can call ``doCleanups()``.
+    
+    Exceptions raises inside cleanup functions will cause the test to fail, but all cleanup functions will still run.
+    
+
 
 Test Skipping and Expected Failures
 ===================================
