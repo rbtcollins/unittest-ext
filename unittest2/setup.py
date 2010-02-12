@@ -42,21 +42,20 @@ New features include:
   for comparing specific types
 * ``assertRaises`` as context manager, with access to the exception afterwards 
 * test discovery and new command line options 
-* test skipping and expected failures * ``load_tests`` protocol for loading
-  tests from modules or packages 
+* test skipping and expected failures
+* ``load_tests`` protocol for loading tests from modules or packages 
 * ``startTestRun`` and ``stopTestRun`` methods on TestResult
 * various other API improvements and fixes
 
-.. note::
+.. note:: Command line usage
 
     In Python 2.7 you invoke the unittest command line features (including test
     discover) with ``python -m unittest <args>``. As unittest is a package, and
     the ability to invoke packages with ``python -m ...`` is new in Python 2.7,
     we can't do this for unittest2.
     
-    Instead unittest2 comes with a script ``unit2`. `Command line usage 
-    <http://docs.python.org/dev/library/unittest.html#command-line-interface>`_
-    ::
+    Instead unittest2 comes with a script ``unit2``. 
+    `Command line usage <http://docs.python.org/dev/library/unittest.html#command-line-interface>`_::
     
         unit2 discover
         unit2 -v test_module
@@ -75,7 +74,7 @@ Look for notes about features added or changed in Python 2.7.
 
 unittest2 is maintained in an SVN repository courtesy of google code:
 
-* http://code.google.com/p/unittest-ext/source/browse/#svn/trunk/unittest2
+* `unittest2 on google code <http://code.google.com/p/unittest-ext/source/browse/#svn/trunk/unittest2>`_
 """.strip()
 
 CLASSIFIERS = [
