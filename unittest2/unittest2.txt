@@ -86,17 +86,24 @@ Setup new default comparison functions with:
 assertRaises
 ============
 
-As context manager::
+As context manager:
+
+.. code-block:: python
 
     with self.assertRaises(TypeError):
         add(2, '3')
 
 Testing the message with a regular expression:
 
-    with self.assertRaisesRegexp(FooBarError, '^You shouldn't Foo a Bar$'):
+.. code-block:: python
+
+    msg_re = '^You shouldn't Foo a Bar$'
+    with self.assertRaisesRegexp(FooBarError, msg_re):
         foo_the_bar()
 
 Access to the exception object:
+
+.. code-block:: python
 
     with self.assertRaises(TypeError) as cm:
         do_something()
@@ -128,7 +135,9 @@ Command Line Behaviour
 
         python -m unittest -h
 
-New arguments to the ``main()`` function::
+New arguments to the ``main()`` function:
+
+.. code-block:: python
 
     main(exit=False, verbosity=2)
     
@@ -136,8 +145,10 @@ New arguments to the ``main()`` function::
 
     ``exit`` and ``verbosity`` parameters are new. By default ``main()`` calls ``sys.exit()`` when it has finished the test run. This is annoying if you are using it from the interactive interpreter. You can now switch that off and run tests with a higher than default verbosity (equivalent of the ``-v`` command line option).
     
-    For use from the interactive interpreter you can do::
+    For use from the interactive interpreter you can do:
     
+    .. code-block:: pycon
+
         >>> from unittest import main
         >>> main(module='test_module', exit=False)
 
@@ -177,7 +188,9 @@ load_tests
 
 If a test module defines a ``load_tests`` function, that will be called to create the test suite for the module.
 
-This example just uses one specific TestCase::
+This example just uses one specific TestCase:
+
+.. code-block:: python
 
     def load_tests(loader, tests, pattern):
         suite = unittest.TestSuite()
@@ -193,7 +206,9 @@ This example just uses one specific TestCase::
 addCleanup
 ==========
 
-Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends (LIFO).
+Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends (LIFO).:
+
+.. code-block:: python
 
     def testMethod(self):
         temp_dir = tempfile.mkdtemp()
@@ -251,8 +266,9 @@ Minor Changes
 
 * Better messages with the ``longMessage`` class attribute
 * ``TestResult``: ``startTestRun`` and ``stopTestRun`` 
-* TextTestResult public and the TextTestRunner takes a runnerclass argument for providing a custom result class (you used to have to subclass TextTestRunner and override _makeResult)
-* TextTestResult adds the test name to the test description even if you provide a docstring
+* ``TextTestResult`` public and the ``TextTestRunner`` takes a runnerclass argument for providing a custom result class (you used to have to subclass ``TextTestRunner`` and override ``_makeResult``)
+* ``TextTestResult`` adds the test name to the test description even if you provide a docstring
+
 
 The unittest2 Package
 =====================
@@ -261,6 +277,7 @@ The unittest2 Package
 
     pip install unittest2
 
+* http://pypi.python.org/pypi/unittest2
 * Tested with Python 2.4, 2.5 & 2.6
 * Should it be called unittest?
 
