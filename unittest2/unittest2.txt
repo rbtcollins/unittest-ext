@@ -262,6 +262,7 @@ The unittest2 Package
 The Future
 ==========
 
-* classSetUp / classTearDown and moduleSetUp / moduleTearDown - shared fixtures 
-* parameterized tests
-* test outcomes (`Robert Collins <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_)
+* ``classSetUp`` / ``classTearDown`` and ``moduleSetUp`` / ``moduleTearDown`` - shared fixtures
+* Maybe Test Resources instead...
+* `parameterized tests <http://bugs.python.org/issue7897>`_
+* `test outcomes <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_
