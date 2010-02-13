@@ -257,7 +257,23 @@ Minor Changes
 The unittest2 Package
 =====================
 
-* The ``unittest2`` package (back-port to Python 2.4 of the changes)
+::
+
+    pip install unittest2
+
+* Tested with Python 2.4, 2.5 & 2.6
+* Should it be called unittest?
+
+Command line functionality (test discovery) provided with the ``unit2`` (or ``unit2.py``) script. 
+
+.. class:: handout
+
+    Replace ``import unittest`` with ``import unittest2``. 
+    
+    ``pythoon -m unittest ...`` works in Python 2.7 even though unittest is a package. In Python 2.4-2.6 this doesn't work (packages can't be executed with ``-m``), hence the need for ``unit2``. An alternative possibility would be to turn ``unittest2`` back into a single module, but that is pretty horrible.
+    
+    Classes in unittest2 derive from the equivalent classes in unittest, so it should be possible to use the unittest2 test running infrastructure without having to switch all your tests to using unittest2 immediately. Similarly you can use the new assert methods on unittest2.TestCase with the standard unittest test running infrastructure. Not all of the new features in unittest2 will work with the standard unittest test loaders and runners however.
+    
 
 The Future
 ==========
