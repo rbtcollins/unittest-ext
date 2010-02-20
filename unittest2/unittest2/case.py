@@ -7,7 +7,10 @@ import re
 import unittest
 import warnings
 
-from unittest2 import result, util
+from unittest2 import result
+from unittest2.util import (
+    safe_repr, strclass, sorted_list_difference
+)
 
 try:
     from functools import wraps
@@ -257,7 +260,7 @@ class TestCase(unittest.TestCase):
 
 
     def id(self):
-        return "%s.%s" % (util.strclass(self.__class__), self._testMethodName)
+        return "%s.%s" % (strclass(self.__class__), self._testMethodName)
 
     def __eq__(self, other):
         if type(self) is not type(other):
@@ -272,11 +275,11 @@ class TestCase(unittest.TestCase):
         return hash((type(self), self._testMethodName))
 
     def __str__(self):
-        return "%s (%s)" % (self._testMethodName, util.strclass(self.__class__))
+        return "%s (%s)" % (self._testMethodName, strclass(self.__class__))
 
     def __repr__(self):
         return "<%s testMethod=%s>" % \
-               (util.strclass(self.__class__), self._testMethodName)
+               (strclass(self.__class__), self._testMethodName)
 
     def run(self, result=None):
         orig_result = result
@@ -799,7 +802,7 @@ class TestCase(unittest.TestCase):
             """
             expected.sort()
             actual.sort()
-            missing, unexpected = util.sorted_list_difference(expected, actual)
+            missing, unexpected = sorted_list_difference(expected, actual)
         errors = []
         if missing:
             errors.append('Expected, but missing:\n    %r' % missing)
@@ -956,11 +959,11 @@ class FunctionTestCase(TestCase):
                      self._testFunc, self._description))
 
     def __str__(self):
-        return "%s (%s)" % (util.strclass(self.__class__),
+        return "%s (%s)" % (strclass(self.__class__),
                             self._testFunc.__name__)
 
     def __repr__(self):
-        return "<%s testFunc=%s>" % (util.strclass(self.__class__),
+        return "<%s testFunc=%s>" % (strclass(self.__class__),
                                      self._testFunc)
 
     def shortDescription(self):
