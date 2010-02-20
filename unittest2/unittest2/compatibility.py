@@ -1,6 +1,16 @@
 import os
 import sys
 
+try:
+    from functools import wraps
+except ImportError:
+    # only needed for Python 2.4
+    import unittest2.compatibility
+    def wraps(_):
+        def _wraps(func):
+            return func
+        return _wraps
+
 # Creates os.path.relpath for Python 2.4
 
 if not hasattr(os, 'relpath'):

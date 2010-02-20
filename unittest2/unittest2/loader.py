@@ -11,6 +11,8 @@ from fnmatch import fnmatch
 
 from unittest2 import case, suite
 
+# setup os.path.relpath if needed
+import unittest2.compatibility
 
 def _CmpToKey(mycmp):
     'Convert a cmp= function into a key= function'

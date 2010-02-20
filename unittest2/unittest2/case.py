@@ -12,15 +12,7 @@ from unittest2.util import (
     safe_repr, strclass, sorted_list_difference
 )
 
-try:
-    from functools import wraps
-except ImportError:
-    # only needed for Python 2.4
-    import unittest2.compatibility
-    def wraps(_):
-        def _wraps(func):
-            return func
-        return _wraps
+from unittest2.compatibility import wraps
 
 
 class SkipTest(Exception):
@@ -739,7 +731,7 @@ class TestCase(unittest.TestCase):
     def assertIsNot(self, expr1, expr2, msg=None):
         """Just like self.assertTrue(a is not b), but with a nicer default message."""
         if expr1 is expr2:
-            standardMsg = 'unexpectedly identical: %r' % (expr1,)
+            standardMsg = 'unexpectedly identical: %s' % (safe_repr(expr1),)
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertDictEqual(self, d1, d2, msg=None):
@@ -761,14 +753,16 @@ class TestCase(unittest.TestCase):
                 missing.append(key)
             elif value != actual[key]:
                 mismatched.append('%s, expected: %s, actual: %s' %
-                                  (key, value, actual[key]))
+                                  (safe_repr(key), safe_repr(value), 
+                                   safe_repr(actual[key])))
 
         if not (missing or mismatched):
             return
 
         standardMsg = ''
         if missing:
-            standardMsg = 'Missing: %r' % ','.join(missing)
+            standardMsg = 'Missing: %s' % ','.join(safe_repr(m) for m in 
+                                                    missing)
         if mismatched:
             if standardMsg:
                 standardMsg += '; '
@@ -812,9 +806,11 @@ class TestCase(unittest.TestCase):
             missing, unexpected = sorted_list_difference(expected, actual)
         errors = []
         if missing:
-            errors.append('Expected, but missing:\n    %r' % missing)
+            errors.append('Expected, but missing:\n    %s' % 
+                           safe_repr(missing))
         if unexpected:
-            errors.append('Unexpected, but present:\n    %r' % unexpected)
+            errors.append('Unexpected, but present:\n    %s' % 
+                           safe_repr(unexpected))
         if errors:
             standardMsg = '\n'.join(errors)
             self.fail(self._formatMessage(msg, standardMsg))
@@ -834,31 +830,31 @@ class TestCase(unittest.TestCase):
     def assertLess(self, a, b, msg=None):
         """Just like self.assertTrue(a < b), but with a nicer default message."""
         if not a < b:
-            standardMsg = '%r not less than %r' % (a, b)
+            standardMsg = '%s not less than %s' % (safe_repr(a), safe_repr(b))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertLessEqual(self, a, b, msg=None):
         """Just like self.assertTrue(a <= b), but with a nicer default message."""
         if not a <= b:
-            standardMsg = '%r not less than or equal to %r' % (a, b)
+            standardMsg = '%s not less than or equal to %s' % (safe_repr(a), safe_repr(b))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertGreater(self, a, b, msg=None):
         """Just like self.assertTrue(a > b), but with a nicer default message."""
         if not a > b:
-            standardMsg = '%r not greater than %r' % (a, b)
+            standardMsg = '%s not greater than %s' % (safe_repr(a), safe_repr(b))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertGreaterEqual(self, a, b, msg=None):
         """Just like self.assertTrue(a >= b), but with a nicer default message."""
         if not a >= b:
-            standardMsg = '%r not greater than or equal to %r' % (a, b)
+            standardMsg = '%s not greater than or equal to %s' % (safe_repr(a), safe_repr(b))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertIsNone(self, obj, msg=None):
         """Same as self.assertTrue(obj is None), with a nicer default message."""
         if obj is not None:
-            standardMsg = '%r is not None' % obj
+            standardMsg = '%s is not None' % (safe_repr(obj),)
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertIsNotNone(self, obj, msg=None):
@@ -871,13 +867,13 @@ class TestCase(unittest.TestCase):
         """Same as self.assertTrue(isinstance(obj, cls)), with a nicer
         default message."""
         if not isinstance(obj, cls):
-            standardMsg = '%r is not an instance of %r' % (obj, cls)
+            standardMsg = '%s is not an instance of %r' % (safe_repr(obj), cls)
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertNotIsInstance(self, obj, cls, msg=None):
         """Included for symmetry with assertIsInstance."""
         if isinstance(obj, cls):
-            standardMsg = '%r is an instance of %r' % (obj, cls)
+            standardMsg = '%s is an instance of %r' % (safe_repr(obj), cls)
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertRaisesRegexp(self, expected_exception, expected_regexp,
