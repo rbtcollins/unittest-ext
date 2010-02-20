@@ -2572,6 +2572,14 @@ class Test_TestCase(unittest2.TestCase, TestEquality, TestHashing):
         self.assertRaises(unittest2.TestCase.failureException,
                           self.assertDictContainsSubset, {'a': 1, 'c': 1},
                           {'a': 1}, '.*Missing:.*Mismatched values:.*')
+        
+        self.assertRaises(self.failureException,
+                          self.assertDictContainsSubset, {1: "one"}, {})
+        
+        one = ''.join(chr(i) for i in range(255))
+        # this used to cause a UnicodeDecodeError constructing the failure msg
+        self.assertRaises(self.failureException,
+            self.assertDictContainsSubset, {'foo': one}, {'foo': u'\uFFFD'})
 
     def testAssertEqual(self):
         equal_pairs = [
