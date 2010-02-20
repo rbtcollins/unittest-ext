@@ -374,13 +374,13 @@ class TestCase(unittest.TestCase):
     def assertFalse(self, expr, msg=None):
         "Fail the test if the expression is true."
         if expr:
-            msg = self._formatMessage(msg, "%r is not False" % expr)
+            msg = self._formatMessage(msg, "%s is not False" % safe_repr(expr))
             raise self.failureException(msg)
 
     def assertTrue(self, expr, msg=None):
         """Fail the test unless the expression is true."""
         if not expr:
-            msg = self._formatMessage(msg, "%r is not True" % expr)
+            msg = self._formatMessage(msg, "%s is not True" % safe_repr(expr))
             raise self.failureException(msg)
 
     def _formatMessage(self, msg, standardMsg):
@@ -461,7 +461,7 @@ class TestCase(unittest.TestCase):
     def _baseAssertEqual(self, first, second, msg=None):
         """The default assertEqual implementation, not type specific."""
         if not first == second:
-            standardMsg = '%r != %r' % (first, second)
+            standardMsg = '%s != %s' % (safe_repr(first), safe_repr(second))
             msg = self._formatMessage(msg, standardMsg)
             raise self.failureException(msg)
 
@@ -477,7 +477,8 @@ class TestCase(unittest.TestCase):
            operator.
         """
         if not first != second:
-            msg = self._formatMessage(msg, '%r == %r' % (first, second))
+            msg = self._formatMessage(msg, '%s == %s' % (safe_repr(first), 
+                                                           safe_repr(second)))
             raise self.failureException(msg)
 
     def assertAlmostEqual(self, first, second, places=7, msg=None):
@@ -495,7 +496,9 @@ class TestCase(unittest.TestCase):
             # shortcut for ite
             return
         if round(abs(second-first), places) != 0:
-            standardMsg = '%r != %r within %r places' % (first, second, places)
+            standardMsg = '%s != %s within %r places' % (safe_repr(first), 
+                                                          safe_repr(second), 
+                                                          places)
             msg = self._formatMessage(msg, standardMsg)
             raise self.failureException(msg)
 
@@ -510,7 +513,9 @@ class TestCase(unittest.TestCase):
            Objects that are equal automatically fail.
         """
         if (first == second) or round(abs(second-first), places) == 0:
-            standardMsg = '%r == %r within %r places' % (first, second, places)
+            standardMsg = '%s == %s within %r places' % (safe_repr(first), 
+                                                          safe_repr(second),
+                                                          places)
             msg = self._formatMessage(msg, standardMsg)
             raise self.failureException(msg)
 
@@ -560,11 +565,11 @@ class TestCase(unittest.TestCase):
         if seq_type != None:
             seq_type_name = seq_type.__name__
             if not isinstance(seq1, seq_type):
-                raise self.failureException('First sequence is not a %s: %r'
-                                            % (seq_type_name, seq1))
+                raise self.failureException('First sequence is not a %s: %s'
+                                            % (seq_type_name, safe_repr(seq1)))
             if not isinstance(seq2, seq_type):
-                raise self.failureException('Second sequence is not a %s: %r'
-                                            % (seq_type_name, seq2))
+                raise self.failureException('Second sequence is not a %s: %s'
+                                            % (seq_type_name, safe_repr(seq2)))
         else:
             seq_type_name = "sequence"
 
@@ -714,19 +719,21 @@ class TestCase(unittest.TestCase):
     def assertIn(self, member, container, msg=None):
         """Just like self.assertTrue(a in b), but with a nicer default message."""
         if member not in container:
-            standardMsg = '%r not found in %r' % (member, container)
+            standardMsg = '%s not found in %s' % (safe_repr(member), 
+                                                   safe_repr(container))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertNotIn(self, member, container, msg=None):
         """Just like self.assertTrue(a not in b), but with a nicer default message."""
         if member in container:
-            standardMsg = '%r unexpectedly found in %r' % (member, container)
+            standardMsg = '%s unexpectedly found in %s' % (safe_repr(member), 
+                                                            safe_repr(container))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertIs(self, expr1, expr2, msg=None):
         """Just like self.assertTrue(a is b), but with a nicer default message."""
         if expr1 is not expr2:
-            standardMsg = '%r is not %r' % (expr1, expr2)
+            standardMsg = '%s is not %s' % (safe_repr(expr1), safe_repr(expr2))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertIsNot(self, expr1, expr2, msg=None):
