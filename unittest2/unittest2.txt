@@ -1,9 +1,9 @@
 ====================
  New *and* Improved
 ====================
-----------------------------
- Coming changes to unittest
-----------------------------
+------------------------------------------------
+ Coming changes to unittest in Python 2.7 & 3.2
+------------------------------------------------
 
 .. include:: <s5defs.txt>
 .. footer:: Michael Foord 2010
@@ -12,43 +12,84 @@
 | michael@voidspace.org.uk
 | **www.voidspace.org.uk**
 
-*If it isn't tested it doesn't work.* -- *If you write applications without tests then you are a bad person, incapable of love.*
+*A lolcat free presentation.*
 
 
 .. contents:: New *and* improved: Coming changes to unittest
    :class: handout
-   
+
+
    
 Introduction
 ============
 
-`unittest module <http://docs.python.org/library/unittest.html>`_ is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
+`unittest <http://docs.python.org/library/unittest.html>`_ is the Python standard library testing framework. It is sometimes known as ``PyUnit`` and has a rich heritage as part of the `xUnit <http://en.wikipedia.org/wiki/XUnit>`_ family of testing libraries.
 
-Until sometime after Python 2.6 was released ``unittest`` was stable to the point of rigor mortis, but several developers have been working on adding much needed features and some of the most successful concepts (like test discovery) from the other major Python test frameworks. These changes will arrive in Python 2.7 and 3.2 (although a *few* of them made it into Python 3.1).
+Python has the best testing infrastructure available of any of the major programming languages.
+
+``unittest`` is the most widely used Python testing framework.
+
+
+unittest is changing
+====================
+
+    
+New features documented at `docs.python.org/dev/library/unittest.html <http://docs.python.org/dev/library/unittest.html>`_
+
+.. class:: handout
+
+    Until sometime after Python 2.6 was released ``unittest`` was stable to the point of rigor mortis, but several developers have been working on adding much needed features and some of the most successful concepts (like test discovery) from the other major Python test frameworks. These changes will arrive in Python 2.7 and 3.2 (although a *few* of them made it into Python 3.1).
+    
+    I started maintaining ``unittest`` about a year ago and haven't been fired yet.
+
+    Find the new stuff by looking for the *new in Python 2.7* or *changed in Python 2.7* notes in the development docs.
+    
+
+Evolution not revolution, backwards compatibility is important.
+
+.. class:: handout
+    
+    No mass change to PEP8 compliant API for example. (Even PEP8 says that internal consistency is more important.)
+    
 
 
 New Assert Methods
 ==================
 
+* ``assertGreater`` / ``assertLess`` / ``assertGreaterEqual`` / ``assertLessEqual``
+* ``assertRegexpMatches(text, regexp)`` - verifies that regexp search matches text
+* ``assertIn(value, sequence)`` / ``assertNotIn`` - assert membership in a container
+* ``assertIs(first, second)`` / ``assertIsNot`` - assert identity
+* ``assertIsNone`` / ``assertIsNotNone``
+
 .. class:: handout
 
     The point of assertion methods in unittest is to provide useful messages on failure and to provide ready made methods for common assertions. Many of these were contributed by google or are in common use in other unittest extensions.
     
-* ``assertGreater`` / ``assertLess`` / ``assertGreaterEqual`` / ``assertLessEqual``
-* ``assertRegexpMatches(text, regext)`` - verifies that regexp search matches text
-* ``assertIn(value, sequence)`` / ``assertNotIn`` - verifies the provided value is a member of the provided sequence
-* ``assertIsNone`` / ``assertIsNotNone`` - assert a value is None
-* ``assertIs(first, second)`` / ``assertIsNot`` - assert that first and second are the same object (identity)
+    
+Even More...
+============
+
 * ``assertIsInstance`` / ``assertNotIsInstance``
 * ``assertDictContainsSubset(subset, full)`` - Tests whether the key/value pairs in dictionary full are a superset of those in superset.
-* ``assertSequenceEqual(actual, expected)`` - ignores type but checks members are the same
+* ``assertSequenceEqual(actual, expected)`` - ignores type of container but checks members are the same
 * ``assertSameElements(actual, expected)`` - ignores order and duplicates
-  
-  
+
+
 Deprecations
 ============
 
-``unittest`` used to have lots of ways of spelling the same methods. The duplicates have now been deprecated:
+.. image:: images/deprecated.jpg
+    :align: center
+    :width: 450
+    :height: 450
+    
+
+``unittest`` used to have lots of ways of spelling the same methods. The duplicates have now been deprecated (but not removed).
+
+
+Deprecated Methods
+==================
 
 * ``assert_`` -> use ``assertTrue`` instead
 * ``fail*`` -> use ``assert*`` instead
@@ -67,44 +108,52 @@ New assertion methods *don't* have a ``fail...`` alias as well. If you preferred
         failUnlessEqual, failIfEqual, failUnlessAlmostEqual, failIfAlmostEqual, failUnless, failUnlessRaises, failIf
 
 
-Type Specific Equality
-======================  
+Type Specific Equality Functions
+================================
 
-More useful failure messages when comparing specific types. Delegated to by ``assertEqual`` when you compare objects of the same (known) type:
+More useful failure messages when comparing specific types. Used by ``assertEqual`` when when comparing known types:
 
 * ``assertMultilineEqual``   - uses `difflib <http://docs.python.org/library/difflib.html>`_, default for comparing unicode strings
 * ``assertSetEqual`` - default for comparing sets
-* ``assertDictEqual``
+* ``assertDictEqual`` - you get the idea
 * ``assertListEqual``
 * ``assertTupleEqual``
 
-Setup new default comparison functions with:
+
+Add New type specific functions
+===============================
 
 * ``addTypeEqualityFunc(type, function)``
+
+Functions added will be used by default for comparing the specified type. E.g.
+
+
+.. code-block:: python
+
+    self.addTypeEqualityFunc(str, self.assertMultilineEqual)
+
+.. class:: handout
+
+    Useful for comparing custom types.
+    
+    Functions are used when the exact type matches, it does *not* use ``isinstance``.
 
 
 assertRaises
 ============
 
-As context manager:
-
 .. code-block:: python
 
+    # as context manager
     with self.assertRaises(TypeError):
         add(2, '3')
 
-Testing the message with a regular expression:
-
-.. code-block:: python
-
-    msg_re = '^You shouldn't Foo a Bar$'
+    # test message with a regex
+    msg_re = "^You shouldn't Foo a Bar$"
     with self.assertRaisesRegexp(FooBarError, msg_re):
         foo_the_bar()
 
-Access to the exception object:
-
-.. code-block:: python
-
+    # access the exception object
     with self.assertRaises(TypeError) as cm:
         do_something()
     
@@ -125,7 +174,7 @@ Command Line Behaviour
 
     The unittest module can be used from the command line to run tests from modules, classes or even individual test methods. In earlier versions it was only possible to run individual test methods and not modules or classes.
     
-    If you are running tests for a whole test module and you define a ``load_tests`` function, then this function will be called to create the ``TestSuite`` for the module. This is the load_tests protocol.
+    If you are running tests for a whole test module and you define a ``load_tests`` function, then this function will be called to create the ``TestSuite`` for the module. This is the ``load_tests`` protocol.
     
     You can run tests with more detail (higher verbosity) by passing in the -v flag::
 
@@ -135,37 +184,34 @@ Command Line Behaviour
 
         python -m unittest -h
 
-New arguments to the ``main()`` function:
+New ``verbosity`` and ``exit`` arguments to the ``main()`` function (useful for interactive interpreter):
 
-.. code-block:: python
+.. code-block:: pycon
 
-    main(exit=False, verbosity=2)
+    >>> from unittest import main
+    >>> main(module='test_module', verbosity=2, 
+    ...      exit=False)
+
     
 .. class:: handout 
 
     ``exit`` and ``verbosity`` parameters are new. By default ``main()`` calls ``sys.exit()`` when it has finished the test run. This is annoying if you are using it from the interactive interpreter. You can now switch that off and run tests with a higher than default verbosity (equivalent of the ``-v`` command line option).
     
-    For use from the interactive interpreter you can do:
-    
-    .. code-block:: pycon
-
-        >>> from unittest import main
-        >>> main(module='test_module', exit=False)
-
     The command line can also be used for test discovery, for running all of the tests in a project or just a subset.
 
 
 Test Discovery
 ==============
 
-Test discovery has been missing from unittest for a long time, forcing everyone to write their own test discovery / collection system.
+.. class:: handout
+ 
+    Test discovery has been missing from unittest for a long time, forcing everyone to write their own test discovery / collection system.
 
 ::
 
     python -m unittest discover
-
-
-The ``discover`` sub-command has the following options:
+    
+..
 
    -v, --verbose    Verbose output
    -s directory     Directory to start discovery ('.' default)
@@ -173,29 +219,39 @@ The ``discover`` sub-command has the following options:
    -t directory     Top level directory of project (default to
                     start directory)
 
-.. class:: handout
+The options can also be passsed in as positional arguments.
 
+.. class:: handout
     
-    The -s, -p, & -t options can be passsed in as positional arguments. The
-    following two command lines are equivalent::
+    The following two command lines are equivalent::
 
        python -m unittest discover -s project_directory -p '*_test.py'
        python -m unittest discover project_directory '*_test.py'
+
+    There are a few rules for test discovery to work, these may be relaxed in the future. *For test discovery all test modules must be importable from the top level directory of the project.*
+    
+    There is an implementation of *just* the test discovery (well, plus ``load_tests``) to work with standard unittest. The discover module: http://pypi.python.org/pypi/discover
+    ::
+    
+        pip install discover
+        python -m discover
 
 
 load_tests
 ==========
 
-If a test module defines a ``load_tests`` function, that will be called to create the test suite for the module.
+If a test module defines a ``load_tests`` function it will be called to create the test suite for the module.
 
-This example just uses one specific TestCase:
+This example loads tests from two specific TestCases:
 
 .. code-block:: python
 
     def load_tests(loader, tests, pattern):
         suite = unittest.TestSuite()
-        case = loader.loadTestsFromTestCase(TestCase)
-        suite.addTests(case)
+        case1 = loader.loadTestsFromTestCase(TestCase1)
+        case2 = loader.loadTestsFromTestCase(TestCase2)
+        suite.addTests(case1)
+        suite.addTests(case2)
         return suite
 
 .. class:: handout
@@ -203,16 +259,19 @@ This example just uses one specific TestCase:
     The ``tests`` argument is the standard tests that would be loaded from the module by default as a TestSuite. If you just want to add extra tests you can just call ``addTests`` on this. ``pattern`` is only used in the ``__init__.py`` of test packages when loaded from test discovery. This allows the ``load_tests`` function to continue (and customize) test discovery into the package. In standard test modules ``pattern`` will be None.
 
 
-addCleanup
-==========
+Cleanup Functions with addCleanup
+=================================
 
-Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends (LIFO).:
+Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point including in ``setUp``, ``tearDown`` or inside clean-up functions, and they are guaranteed to be run when the test ends (LIFO). ``self.addCleanup(function, *args, **kwargs)``:
 
 .. code-block:: python
 
-    def testMethod(self):
+    def test_method(self):
         temp_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_dir)
+        ...
+
+No need for nested ``try: ... finally:`` blocks in tests to clean up resources.
 
 .. class:: handout
     
@@ -228,42 +287,65 @@ Makes ``tearDown`` obsolete! Push clean-up functions onto a stack, at any point 
 Test Skipping
 =============
 
-Decorators that work as class or method decorators for conditionally or unconditionally skipping tests::
+Decorators that work as class or method decorators for conditionally or unconditionally skipping tests:
+
+.. code-block:: python
 
     @skip("skip this test")
-    def testMethod(self):
+    def test_method(self):
         ...
     
-    @skipIf(sys.version_info[2] < 5, "only works on Python 2.5+")
-    def testMethod(self):
+    @skipIf(sys.version_info[2] < 5, "only Python > 2.5")
+    def test_method(self):
         ...
         
-    @skipUnless(sys.version_info[2] < 5, "only needed on Python < 2.5")
-    def testMethod(self):
+    @skipUnless(sys.version_info[2] < 5, "only Python < 2.5")
+    def test_method(self):
         ...
 
 More Skipping
 =============
 
-::
+.. code-block:: python
 
-    def testMethod(self):
-        self.skip("skip, skippety skip")
+    def test_method(self):
+        self.skipTest("skip, skippety skip")
     
-    def testMethod(self):
-        raise SkipException("whoops, time to skip")
+    def test_method(self):
+        raise SkipTest("whoops, time to skip")
 
     @expectedFailure
-    def testThatFails(self):
+    def test_that_fails(self):
         self.fail('this *should* fail')
 
 .. class:: handout
 
-    Ok, so ``expectedFailure`` isn't for skipping tests. You use it for test that are known to fail currently. If you fix the problem, so the test starts to pass, then it will be reported as an unexpected success. This will remind you to go back and remove the expectedFailure decorator. 
+    Ok, so ``expectedFailure`` isn't for skipping tests. You use it for test that are known to fail currently. If you fix the problem, so the test starts to pass, then it will be reported as an unexpected success. This will remind you to go back and remove the ``expectedFailure`` decorator.
+    
+Skipped tests appear in the report as 'skipped (s)', so the number of tests run will always be the same even when skipping.
+
+
+As class decorator
+==================
+
+
+.. code-block:: python
+
+    # for Python >= 2.6
+    @skipIf(sys.platform == 'win32)
+    class SomeTest(TestCase)
+        ...
+        
+    # Python pre-2.6
+    class SomeTest(TestCase)
+        ...
+    SomeTest = skipIf(sys.platform == 'win32')(SomeTest)
+
 
 Minor Changes
 =============
 
+* unittest is now a package instead of a module
 * Better messages with the ``longMessage`` class attribute
 * ``TestResult``: ``startTestRun`` and ``stopTestRun`` 
 * ``TextTestResult`` public and the ``TextTestRunner`` takes a runnerclass argument for providing a custom result class (you used to have to subclass ``TextTestRunner`` and override ``_makeResult``)
@@ -279,7 +361,7 @@ The unittest2 Package
 
 * http://pypi.python.org/pypi/unittest2
 * Tested with Python 2.4, 2.5 & 2.6
-* Should it be called unittest?
+* This presentation is the documentation...
 
 Command line functionality (test discovery) provided with the ``unit2`` (or ``unit2.py``) script. 
 
@@ -291,6 +373,8 @@ Command line functionality (test discovery) provided with the ``unit2`` (or ``un
     
     Classes in unittest2 derive from the equivalent classes in unittest, so it should be possible to use the unittest2 test running infrastructure without having to switch all your tests to using unittest2 immediately. Similarly you can use the new assert methods on unittest2.TestCase with the standard unittest test running infrastructure. Not all of the new features in unittest2 will work with the standard unittest test loaders and runners however.
     
+    There is also the `discover module <http://pypi.python.org/pypi/discover>`_ if all you want is test discovery: ``python -m discover`` (same command line options).
+    
 
 The Future
 ==========
@@ -299,3 +383,16 @@ The Future
 * Maybe Test Resources instead...
 * `parameterized tests <http://bugs.python.org/issue7897>`_
 * `test outcomes <http://rbtcollins.wordpress.com/2009/09/23/python-unittest-api-time-to-fix-it/>`_
+* The *big* issue with unittest is extensibility
+
+
+Any Questions?
+==============
+
+.. image:: images/lolcat-oops.jpg
+    :align: center
+    
+* Use ``unittest2`` and report any bugs or problems
+* Make feature requests on the Python issue tracker: `bugs.python.org <http://bugs.python.org>`_
+* Join the `Testing in Python <http://lists.idyll.org/listinfo/testing-in-python>`_ mailing list
+    
