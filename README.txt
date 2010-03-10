@@ -1,7 +1,3 @@
-# Copyright Michael Foord 2009
-# Licensed under the BSD License
-# See: http://pypi.python.org/pypi/discover
-
 This is the test discovery mechanism and ``load_tests`` protocol for unittest
 backported from Python 2.7 to work with Python 2.4 or more recent (including 
 Python 3).
@@ -59,6 +55,13 @@ pattern then the package will be checked for a ``load_tests``
 function. If this exists then it will be called with *loader*, *tests*,
 *pattern*.
 
+.. note::
+
+    The default pattern for matching tests is ``test*.py``. The '.py' means
+    that it will match test files and *not* match package names. You can
+    change this by changing the pattern using a command line option like
+    ``-p 'test*'``.
+
 If ``load_tests`` exists then discovery does  *not* recurse into the package,
 ``load_tests`` is responsible for loading all tests in the package.
 
@@ -77,14 +80,21 @@ http://code.google.com/p/unittest-ext/source/browse/trunk/discover.py
 CHANGELOG
 =========
 
+2010/02/07 0.3.2
+----------------
+
+* If ``load_tests`` exists it is passed the standard tests as a ``TestSuite`` 
+  rather than a list of tests.
+
 2009/09/13 0.3.1
 ----------------
 
-* Fixed bug when package directory matches the pattern.
+* Fixed a problem when a package directory matches the discovery pattern.
 
 2009/08/20 0.3.0
 ----------------
 
-* Failing to import a file (e.g. due to a syntax error) no longer halts discovery but is reported as a failure.
+* Failing to import a file (e.g. due to a syntax error) no longer halts
+  discovery but is reported as a failure.
 * Discovery will not attempt to import test files whose names are not valid Python
   identifiers, even if they match the pattern.
