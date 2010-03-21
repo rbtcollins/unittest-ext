@@ -80,6 +80,13 @@ http://code.google.com/p/unittest-ext/source/browse/trunk/discover.py
 CHANGELOG
 =========
 
+
+2010/XX/XX 0.3.3
+----------------
+
+* A faulty load_tests function will not halt test discovery. A failing test
+  is created to report the error.
+
 2010/02/07 0.3.2
 ----------------
 

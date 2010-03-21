@@ -22,25 +22,31 @@ else:
     # for Python 3.0 compatibility
     class_types = type
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
 # from '.py', '.pyc' *and* '.pyo'
 VALID_MODULE_NAME = re.compile(r'[_a-z]\w*\.py$', re.IGNORECASE)
 
-def make_failed_import_test(name, suiteClass):
+def _make_failed_import_test(name, suiteClass):
     message = 'Failed to import test module: %s' % name
     if hasattr(traceback, 'format_exc'):
         # Python 2.3 compatibility
         # format_exc returns two frames of discover.py as well
         message += '\n%s' % traceback.format_exc()
-    
-    def testImportFailure(self):
-        raise ImportError(message)
-    attrs = {name: testImportFailure}
-    ModuleImportFailure = type('ModuleImportFailure', (unittest.TestCase,), attrs)
-    return suiteClass((ModuleImportFailure(name),))
+    return _make_failed_test('ModuleImportFailure', name, ImportError(message),
+                             suiteClass)
+
+def _make_failed_load_tests(name, exception, suiteClass):
+    return _make_failed_test('LoadTestsFailure', name, exception, suiteClass)
+
+def _make_failed_test(classname, methodname, exception, suiteClass):
+    def testFailure(self):
+        raise exception
+    attrs = {methodname: testFailure}
+    TestClass = type(classname, (case.TestCase,), attrs)
+    return suiteClass((TestClass(methodname),))
 
 
 class DiscoveringTestLoader(unittest.TestLoader):
@@ -61,7 +67,12 @@ class DiscoveringTestLoader(unittest.TestLoader):
         load_tests = getattr(module, 'load_tests', None)
         tests = self.suiteClass(tests)
         if use_load_tests and load_tests is not None:
-            return load_tests(self, tests, None)
+            try:
+                return load_tests(self, tests, None)
+            except:
+                e = sys.exc_info()[1]
+                return _make_failed_load_tests(module.__name__, e,
+                                               self.suiteClass)
         return tests
 
 
@@ -162,7 +173,12 @@ class DiscoveringTestLoader(unittest.TestLoader):
                     for test in self._find_tests(full_path, pattern):
                         yield test
                 else:
-                    yield load_tests(self, tests, pattern)
+                    try:
+                        yield load_tests(self, tests, pattern)
+                    except:
+                        e = sys.exc_info()[1]
+                        yield _make_failed_load_tests(package.__name__, e,
+                                                      self.suiteClass)
 
 
 ##############################################
