@@ -150,10 +150,14 @@ class DiscoveringTestLoader(unittest.TestLoader):
         elif (isinstance(obj, UnboundMethodType) and
               isinstance(parent, type) and
               issubclass(parent, unittest.TestCase)):
-            return self.suiteClass([parent(obj.__name__)])
+            name = obj.__name__
+            inst = parent(name)
+            # static methods follow a different path
+            if not isinstance(getattr(inst, name), types.FunctionType):
+                return self.suiteClass([inst])
         elif isinstance(obj, unittest.TestSuite):
             return obj
-        elif hasattr(obj, '__call__'):
+        if hasattr(obj, '__call__'):
             test = obj()
             if isinstance(test, unittest.TestSuite):
                 return test

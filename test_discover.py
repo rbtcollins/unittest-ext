@@ -19,6 +19,7 @@ from discover import DiscoveringTestLoader
 try:
     cmp
 except NameError:
+    # can't just import the one from discover - it is wrapped as a staticmethod
     def cmp(x, y):
         """Return -1 if x < y, 0 if x == y and 1 if x > y"""
         return (x > y) - (x < y)
