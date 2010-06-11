@@ -2,11 +2,21 @@ This is the test discovery mechanism and ``load_tests`` protocol for unittest
 backported from Python 2.7 to work with Python 2.4 or more recent (including 
 Python 3).
 
+.. note::
+
+    Test discovery is just part of what is new in unittest in Python 2.7. All
+    of the new features have been backported to run on Python 2.4-2.6, including
+    test discovery. This is the 
+    `unittest2 package <http://pypi.python.org/pypi/unittest2>`_.
+
 discover can be installed with pip or easy_install. After installing switch the
 current directory to the top level directory of your project and run::
 
    python -m discover
    python discover.py
+  
+(If you have setuptools or `distribute <http://pypi.python.org/pypi/distribute>`_
+installed you will also have a ``discover`` script available.)
 
 This will discover all tests (with certain restrictions) from the current
 directory. The discover module has several options to control its behavior (full
@@ -28,8 +38,10 @@ For example to use a different pattern for matching test modules run::
 
     python -m discover -p '*test.py'
 
-(Remember to put quotes around the test pattern or shells like bash will do
-shell expansion rather than passing the pattern through to discover.)
+(For UNIX-like shells like Bash you need to put quotes around the test pattern
+or the shell will attempt to expand the pattern instead of passing it through to
+discover. On Windows you must *not* put quotes around the pattern as the
+Windows shell will pass the quotes to discover as well.)
 
 Test discovery is implemented in ``discover.DiscoveringTestLoader.discover``. As
 well as using discover as a command line script you can import
@@ -81,11 +93,27 @@ CHANGELOG
 =========
 
 
-2010/XX/XX 0.3.3
+2010/XX/XX 0.4.0
 ----------------
 
 * A faulty load_tests function will not halt test discovery. A failing test
   is created to report the error.
+* Matching files during test discovery is done in
+  ``DiscoveringTestLoader._match_path``. This method can be overriden in
+  subclasses to, for example, match on the full file path or use regular
+  expressions for matching.
+* Addition of a setuptools compatible test collector. Set
+  "test_suite = 'discover.collector'" in setup.py. "setup.py test" will start
+  test discovery with default parameters from the same directory as the setup.py.
+* If test discovery imports a module from the wrong location (usually because
+  the module is globally installed and the user is expecting to run tests
+  against a development version in a different location) then discovery halts
+  with an ImportError and the problem is reported.
+* Allow test discovery using dotted module names instead of a path.
+* Addition of a setuptools compatible entrypoint for the discover script.
+
+Feature parity with the ``TestLoader`` in Python 2.7 RC 1.
+
 
 2010/02/07 0.3.2
 ----------------

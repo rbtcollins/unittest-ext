@@ -39,16 +39,34 @@ KEYWORDS = "unittest, testing, tests".split(', ')
 LONG_DESCRIPTION = open('README.txt').read()
 
 
-setup(name=NAME,
-      version=VERSION,
-      description=DESCRIPTION,
-      long_description=LONG_DESCRIPTION,
-      author=AUTHOR,
-      author_email=AUTHOR_EMAIL,
-      url=URL,
-      py_modules=MODULES,
-      classifiers=CLASSIFIERS,
-      keywords=KEYWORDS
-     )
+params = dict(
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    url=URL,
+    py_modules=MODULES,
+    classifiers=CLASSIFIERS,
+    keywords=KEYWORDS
+)
+
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+else:
+    params.update(dict(
+        entry_points = {
+            'console_scripts': [
+                'discover = discover:main',
+                ],
+            },
+    ))
+    params['test_suite'] = 'discover.collector'
+
+setup(**params)
 
 
