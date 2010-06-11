@@ -5,15 +5,18 @@ import unittest
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 7: 
     import unittest2
+    import_string = 'unittest2'
 else:
     # probably won't work w/ Python 3.0 / 3.1
     unittest2 = unittest
+    import_string = 'unittest'
 
 from discover import DiscoveringTestLoader
 
 try:
     cmp
 except NameError:
+    # can't just import the one from discover - it is wrapped as a staticmethod
     def cmp(x, y):
         """Return -1 if x < y, 0 if x == y and 1 if x > y"""
         return (x > y) - (x < y)
@@ -274,7 +277,7 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
 
         try:
-            loader.loadTestsFromName('unittest2.sdasfasfasdf')
+            loader.loadTestsFromName('%s.sdasfasfasdf' % import_string)
         except:
             ExceptionClass, e = sys.exc_info()[:2]
             if ExceptionClass is not AttributeError:
@@ -554,7 +557,7 @@ class Test_TestLoader(unittest2.TestCase):
         # We're going to try to load this module as a side-effect, so it
         # better not be loaded before we try.
         #
-        module_name = 'unittest2.test.dummy'
+        module_name = '%s.test.dummy' % import_string
         sys.modules.pop(module_name, None)
 
         loader = DiscoveringTestLoader()
@@ -669,7 +672,7 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
 
         try:
-            loader.loadTestsFromNames(['unittest2.sdasfasfasdf', 'unittest2'])
+            loader.loadTestsFromNames([import_string + '.sdasfasfasdf', import_string])
         except:
             ExceptionClass, e = sys.exc_info()[:2]
             if ExceptionClass is not AttributeError:
@@ -955,7 +958,7 @@ class Test_TestLoader(unittest2.TestCase):
         # We're going to try to load this module as a side-effect, so it
         # better not be loaded before we try.
         #
-        module_name = 'unittest2.test.dummy'
+        module_name = '%s.test.dummy' % import_string
         sys.modules.pop(module_name, None)
 
         loader = DiscoveringTestLoader()
@@ -1236,11 +1239,6 @@ class Test_TestLoader(unittest2.TestCase):
 
         test_names = ['test_2', 'test_1']
         self.assertEqual(loader.getTestCaseNames(Foo), test_names)
-
-    # "The default value is the built-in cmp() function"
-    def test_sortTestMethodsUsing__default_value(self):
-        loader = DiscoveringTestLoader()
-        self.assertTrue(loader.sortTestMethodsUsing is cmp)
 
     # "it can be set to None to disable the sort."
     #

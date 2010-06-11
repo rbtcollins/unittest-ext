@@ -6,9 +6,13 @@ import unittest
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 7: 
     import unittest2
+    import unittest2.test
+    import_string = 'unittest2'
 else:
-    # probably won't work w/ Python 3.0 / 3.1
     unittest2 = unittest
+    # probably won't work w/ Python 3.0 / 3.1, tested on Python 3.2 and 2.7
+    import unittest.test
+    import_string = 'unittest'
 
 from discover import DiscoveringTestLoader
 
@@ -268,7 +272,7 @@ class TestDiscovery(unittest2.TestCase):
             self.assertEqual(start_dir, expectedPath)
             return tests
         loader._find_tests = _find_tests
-        suite = loader.discover('unittest2.test')
+        suite = loader.discover('%s.test' % import_string)
         self.assertTrue(self.wasRun)
         self.assertEqual(suite._tests, tests)
 
