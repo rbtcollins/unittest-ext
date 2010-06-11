@@ -207,7 +207,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromName('')
-        except ValueError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not ValueError:
+                self.fail("TestLoader.loadTestsFromName failed to raise ValueError")
             self.assertEqual(str(e), "Empty module name")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise ValueError")
@@ -240,7 +243,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromName('sdasfasfasdf')
-        except ImportError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not ImportError:
+                self.fail("TestLoader.loadTestsFromName failed to raise ImportError")
             self.assertEqual(str(e), "No module named sdasfasfasdf")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise ImportError")
@@ -256,7 +262,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromName('unittest2.sdasfasfasdf')
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "'module' object has no attribute 'sdasfasfasdf'")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
@@ -273,7 +282,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromName('sdasfasfasdf', unittest2)
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "'module' object has no attribute 'sdasfasfasdf'")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
@@ -427,7 +439,10 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
         try:
             loader.loadTestsFromName('testcase_1.testfoo', m)
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "type object 'MyTestCase' has no attribute 'testfoo'")
         else:
             self.fail("Failed to raise AttributeError")
@@ -585,7 +600,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromNames([''])
-        except ValueError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not ValueError:
+                self.fail("TestLoader.loadTestsFromName failed to raise ValueError")
             self.assertEqual(str(e), "Empty module name")
         else:
             self.fail("TestLoader.loadTestsFromNames failed to raise ValueError")
@@ -620,7 +638,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromNames(['sdasfasfasdf'])
-        except ImportError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not ImportError:
+                self.fail("TestLoader.loadTestsFromName failed to raise ImportError")
             self.assertEqual(str(e), "No module named sdasfasfasdf")
         else:
             self.fail("TestLoader.loadTestsFromNames failed to raise ImportError")
@@ -636,7 +657,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromNames(['unittest2.sdasfasfasdf', 'unittest2'])
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "'module' object has no attribute 'sdasfasfasdf'")
         else:
             self.fail("TestLoader.loadTestsFromNames failed to raise AttributeError")
@@ -655,7 +679,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromNames(['sdasfasfasdf'], unittest2)
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "'module' object has no attribute 'sdasfasfasdf'")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
@@ -674,7 +701,10 @@ class Test_TestLoader(unittest2.TestCase):
 
         try:
             loader.loadTestsFromNames(['TestCase', 'sdasfasfasdf'], unittest2)
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "'module' object has no attribute 'sdasfasfasdf'")
         else:
             self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
@@ -823,7 +853,10 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
         try:
             loader.loadTestsFromNames(['testcase_1.testfoo'], m)
-        except AttributeError, e:
+        except:
+            ExceptionClass, e = sys.exc_info()[:2]
+            if ExceptionClass is not AttributeError:
+                self.fail("TestLoader.loadTestsFromName failed to raise AttributeError")
             self.assertEqual(str(e), "type object 'MyTestCase' has no attribute 'testfoo'")
         else:
             self.fail("Failed to raise AttributeError")
