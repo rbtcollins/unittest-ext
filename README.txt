@@ -93,24 +93,26 @@ CHANGELOG
 =========
 
 
-2010/XX/XX 0.4.0
+2010/06/11 0.4.0
 ----------------
 
-* A faulty load_tests function will not halt test discovery. A failing test
-  is created to report the error.
-* Matching files during test discovery is done in
-  ``DiscoveringTestLoader._match_path``. This method can be overriden in
-  subclasses to, for example, match on the full file path or use regular
-  expressions for matching.
 * Addition of a setuptools compatible test collector. Set
   "test_suite = 'discover.collector'" in setup.py. "setup.py test" will start
   test discovery with default parameters from the same directory as the setup.py.
+* Allow test discovery using dotted module names instead of a path.
+* Addition of a setuptools compatible entrypoint for the discover script.
+* A faulty load_tests function will not halt test discovery. A failing test
+  is created to report the error.
 * If test discovery imports a module from the wrong location (usually because
   the module is globally installed and the user is expecting to run tests
   against a development version in a different location) then discovery halts
   with an ImportError and the problem is reported.
-* Allow test discovery using dotted module names instead of a path.
-* Addition of a setuptools compatible entrypoint for the discover script.
+* Matching files during test discovery is done in
+  ``DiscoveringTestLoader._match_path``. This method can be overriden in
+  subclasses to, for example, match on the full file path or use regular
+  expressions for matching.
+* Tests for discovery ported from unittest2. (The tests require unittest2 to
+  run.)
 
 Feature parity with the ``TestLoader`` in Python 2.7 RC 1.
 

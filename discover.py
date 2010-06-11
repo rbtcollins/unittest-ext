@@ -16,15 +16,15 @@ import unittest
 
 from fnmatch import fnmatch
 
+__version__ = '0.4.0'
+__all__ = ['DiscoveringTestLoader', 'main', 'defaultTestLoader']
+
+
 if hasattr(types, 'ClassType'):
     class_types = (types.ClassType, type)
 else:
     # for Python 3.0 compatibility
     class_types = type
-
-__version__ = '0.4.0'
-__all__ = ['DiscoveringTestLoader', 'main', 'defaultTestLoader']
-
 
 def _CmpToKey(mycmp):
     'Convert a cmp= function into a key= function'

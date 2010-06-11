@@ -11,7 +11,6 @@ import sys
 from distutils.core import setup
 from discover import __version__ as VERSION
 
-from distutils.core import setup
 
 NAME = 'discover'
 MODULES = ('discover',)
