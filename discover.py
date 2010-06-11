@@ -23,7 +23,7 @@ else:
     class_types = type
 
 __version__ = '0.4.0'
-__all__ = ['DiscoveringTestLoader', 'main']
+__all__ = ['DiscoveringTestLoader', 'main', 'defaultTestLoader']
 
 
 def _CmpToKey(mycmp):
@@ -35,6 +35,11 @@ def _CmpToKey(mycmp):
             return mycmp(self.obj, other.obj) == -1
     return K
 
+try:
+    from types import UnboundMethodType
+except ImportError:
+    # Python 3 compatibility
+    UnboundMethodType = types.FunctionType
 
 # what about .pyc or .pyo (etc)
 # we would need to avoid loading the same tests multiple times
@@ -142,7 +147,7 @@ class DiscoveringTestLoader(unittest.TestLoader):
             return self.loadTestsFromModule(obj)
         elif isinstance(obj, type) and issubclass(obj, unittest.TestCase):
             return self.loadTestsFromTestCase(obj)
-        elif (isinstance(obj, types.UnboundMethodType) and
+        elif (isinstance(obj, UnboundMethodType) and
               isinstance(parent, type) and
               issubclass(parent, unittest.TestCase)):
             return self.suiteClass([parent(obj.__name__)])
@@ -455,12 +460,13 @@ def main(argv=None, testRunner=None, testLoader=None, exit=True, verbosity=1):
     tests, verbosity = _do_discovery(argv, verbosity, testLoader)
     return _run_tests(tests, testRunner, verbosity, exit)
 
+defaultTestLoader = DiscoveringTestLoader()
 
 def collector():
     # import __main__ triggers code re-execution
     __main__ = sys.modules['__main__']
     setupDir = os.path.abspath(os.path.dirname(__main__.__file__))
-    return DiscoveringTestLoader().discover(setupDir)
+    return defaultTestLoader.discover(setupDir)
 
 if __name__ == '__main__':
     if sys.argv[0] is None:

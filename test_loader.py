@@ -2,9 +2,22 @@ import sys
 import types
 
 import unittest
-import unittest2
+
+if sys.version_info[0] == 2 and sys.version_info[1] < 7: 
+    import unittest2
+else:
+    # probably won't work w/ Python 3.0 / 3.1
+    unittest2 = unittest
 
 from discover import DiscoveringTestLoader
+
+try:
+    cmp
+except NameError:
+    def cmp(x, y):
+        """Return -1 if x < y, 0 if x == y and 1 if x > y"""
+        return (x > y) - (x < y)
+
 
 class Test_TestLoader(unittest2.TestCase):
 
