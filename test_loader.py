@@ -21,6 +21,10 @@ except NameError:
         """Return -1 if x < y, 0 if x == y and 1 if x > y"""
         return (x > y) - (x < y)
 
+# In Python 2.5 and earlier TestSuites are not comparable
+# so we use unittest2.TestSuite for these tests
+DiscoveringTestLoader.suiteClass = unittest2.TestSuite
+
 
 class Test_TestLoader(unittest2.TestCase):
 
@@ -35,7 +39,7 @@ class Test_TestLoader(unittest2.TestCase):
             def test_2(self): pass
             def foo_bar(self): pass
 
-        tests = unittest.TestSuite([Foo('test_1'), Foo('test_2')])
+        tests = unittest2.TestSuite([Foo('test_1'), Foo('test_2')])
 
         loader = DiscoveringTestLoader()
         self.assertEqual(loader.loadTestsFromTestCase(Foo), tests)
@@ -48,7 +52,7 @@ class Test_TestLoader(unittest2.TestCase):
         class Foo(unittest2.TestCase):
             def foo_bar(self): pass
 
-        empty_suite = unittest.TestSuite()
+        empty_suite = unittest2.TestSuite()
 
         loader = DiscoveringTestLoader()
         self.assertEqual(loader.loadTestsFromTestCase(Foo), empty_suite)
@@ -63,7 +67,7 @@ class Test_TestLoader(unittest2.TestCase):
     # This is checked for specifically in the code, so we better add a
     # test for it.
     def test_loadTestsFromTestCase__TestSuite_subclass(self):
-        class NotATestCase(unittest.TestSuite):
+        class NotATestCase(unittest2.TestSuite):
             pass
 
         loader = DiscoveringTestLoader()
@@ -161,7 +165,7 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromModule(NotAModule)
 
-        reference = [unittest.TestSuite([MyTestCase('test')])]
+        reference = [unittest2.TestSuite([MyTestCase('test')])]
         self.assertEqual(list(suite), reference)
 
 
@@ -176,14 +180,14 @@ class Test_TestLoader(unittest2.TestCase):
 
         load_tests_args = []
         def load_tests(loader, tests, pattern):
-            self.assertIsInstance(tests, unittest.TestSuite)
+            self.assertIsInstance(tests, unittest2.TestSuite)
             load_tests_args.extend((loader, tests, pattern))
             return tests
         m.load_tests = load_tests
 
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromModule(m)
-        self.assertIsInstance(suite, unittest.TestSuite)
+        self.assertIsInstance(suite, unittest2.TestSuite)
         self.assertEquals(load_tests_args, [loader, suite, None])
 
         load_tests_args = []
@@ -199,7 +203,7 @@ class Test_TestLoader(unittest2.TestCase):
 
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromModule(m)
-        self.assertIsInstance(suite, unittest.TestSuite)
+        self.assertIsInstance(suite, unittest2.TestSuite)
         self.assertEqual(suite.countTestCases(), 1)
         test = list(suite)[0]
         
@@ -414,7 +418,7 @@ class Test_TestLoader(unittest2.TestCase):
         class MyTestCase(unittest2.TestCase):
             def test(self):
                 pass
-        m.testsuite = unittest.TestSuite([MyTestCase('test')])
+        m.testsuite = unittest2.TestSuite([MyTestCase('test')])
 
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromName('testsuite', m)
@@ -470,7 +474,7 @@ class Test_TestLoader(unittest2.TestCase):
         testcase_1 = unittest2.FunctionTestCase(lambda: None)
         testcase_2 = unittest2.FunctionTestCase(lambda: None)
         def return_TestSuite():
-            return unittest.TestSuite([testcase_1, testcase_2])
+            return unittest2.TestSuite([testcase_1, testcase_2])
         m.return_TestSuite = return_TestSuite
 
         loader = DiscoveringTestLoader()
@@ -498,7 +502,7 @@ class Test_TestLoader(unittest2.TestCase):
     #Override the suiteClass attribute to ensure that the suiteClass
     #attribute is used
     def test_loadTestsFromName__callable__TestCase_instance_ProperSuiteClass(self):
-        class SubTestSuite(unittest.TestSuite):
+        class SubTestSuite(unittest2.TestSuite):
             pass
         m = types.ModuleType('m')
         testcase_1 = unittest2.FunctionTestCase(lambda: None)
@@ -518,7 +522,7 @@ class Test_TestLoader(unittest2.TestCase):
     #Override the suiteClass attribute to ensure that the suiteClass
     #attribute is used
     def test_loadTestsFromName__relative_testmethod_ProperSuiteClass(self):
-        class SubTestSuite(unittest.TestSuite):
+        class SubTestSuite(unittest2.TestSuite):
             pass
         m = types.ModuleType('m')
         class MyTestCase(unittest2.TestCase):
@@ -785,7 +789,7 @@ class Test_TestLoader(unittest2.TestCase):
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromNames(['test_2'], NotAModule)
 
-        reference = [unittest.TestSuite([MyTestCase('test')])]
+        reference = [unittest2.TestSuite([MyTestCase('test')])]
         self.assertEqual(list(suite), reference)
 
     # "The specifier name is a ``dotted name'' that may resolve either to
@@ -830,7 +834,7 @@ class Test_TestLoader(unittest2.TestCase):
         class MyTestCase(unittest2.TestCase):
             def test(self):
                 pass
-        m.testsuite = unittest.TestSuite([MyTestCase('test')])
+        m.testsuite = unittest2.TestSuite([MyTestCase('test')])
 
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromNames(['testsuite'], m)
@@ -851,7 +855,7 @@ class Test_TestLoader(unittest2.TestCase):
         suite = loader.loadTestsFromNames(['testcase_1.test'], m)
         self.assertIsInstance(suite, loader.suiteClass)
 
-        ref_suite = unittest.TestSuite([MyTestCase('test')])
+        ref_suite = unittest2.TestSuite([MyTestCase('test')])
         self.assertEqual(list(suite), [ref_suite])
 
     # "The specifier name is a ``dotted name'' that may resolve ... to ... a
@@ -884,14 +888,14 @@ class Test_TestLoader(unittest2.TestCase):
         testcase_1 = unittest2.FunctionTestCase(lambda: None)
         testcase_2 = unittest2.FunctionTestCase(lambda: None)
         def return_TestSuite():
-            return unittest.TestSuite([testcase_1, testcase_2])
+            return unittest2.TestSuite([testcase_1, testcase_2])
         m.return_TestSuite = return_TestSuite
 
         loader = DiscoveringTestLoader()
         suite = loader.loadTestsFromNames(['return_TestSuite'], m)
         self.assertIsInstance(suite, loader.suiteClass)
 
-        expected = unittest.TestSuite([testcase_1, testcase_2])
+        expected = unittest2.TestSuite([testcase_1, testcase_2])
         self.assertEqual(list(suite), [expected])
 
     # "The specifier name is a ``dotted name'' that may resolve ... to
@@ -907,7 +911,7 @@ class Test_TestLoader(unittest2.TestCase):
         suite = loader.loadTestsFromNames(['return_TestCase'], m)
         self.assertIsInstance(suite, loader.suiteClass)
 
-        ref_suite = unittest.TestSuite([testcase_1])
+        ref_suite = unittest2.TestSuite([testcase_1])
         self.assertEqual(list(suite), [ref_suite])
 
     # "The specifier name is a ``dotted name'' that may resolve ... to
@@ -931,7 +935,7 @@ class Test_TestLoader(unittest2.TestCase):
         suite = loader.loadTestsFromNames(['Foo.foo'], m)
         self.assertIsInstance(suite, loader.suiteClass)
 
-        ref_suite = unittest.TestSuite([testcase_1])
+        ref_suite = unittest2.TestSuite([testcase_1])
         self.assertEqual(list(suite), [ref_suite])
 
     # "The specifier name is a ``dotted name'' that may resolve ... to
@@ -966,7 +970,7 @@ class Test_TestLoader(unittest2.TestCase):
             suite = loader.loadTestsFromNames([module_name])
 
             self.assertIsInstance(suite, loader.suiteClass)
-            self.assertEqual(list(suite), [unittest.TestSuite()])
+            self.assertEqual(list(suite), [unittest2.TestSuite()])
 
             # module should now be loaded, thanks to loadTestsFromName()
             self.assertIn(module_name, sys.modules)
@@ -1061,8 +1065,8 @@ class Test_TestLoader(unittest2.TestCase):
             def test_2(self): pass
             def foo_bar(self): pass
 
-        tests_1 = unittest.TestSuite([Foo('foo_bar')])
-        tests_2 = unittest.TestSuite([Foo('test_1'), Foo('test_2')])
+        tests_1 = unittest2.TestSuite([Foo('foo_bar')])
+        tests_2 = unittest2.TestSuite([Foo('test_1'), Foo('test_2')])
 
         loader = DiscoveringTestLoader()
         loader.testMethodPrefix = 'foo'
@@ -1084,8 +1088,8 @@ class Test_TestLoader(unittest2.TestCase):
             def foo_bar(self): pass
         m.Foo = Foo
 
-        tests_1 = [unittest.TestSuite([Foo('foo_bar')])]
-        tests_2 = [unittest.TestSuite([Foo('test_1'), Foo('test_2')])]
+        tests_1 = [unittest2.TestSuite([Foo('foo_bar')])]
+        tests_2 = [unittest2.TestSuite([Foo('test_1'), Foo('test_2')])]
 
         loader = DiscoveringTestLoader()
         loader.testMethodPrefix = 'foo'
@@ -1107,8 +1111,8 @@ class Test_TestLoader(unittest2.TestCase):
             def foo_bar(self): pass
         m.Foo = Foo
 
-        tests_1 = unittest.TestSuite([Foo('foo_bar')])
-        tests_2 = unittest.TestSuite([Foo('test_1'), Foo('test_2')])
+        tests_1 = unittest2.TestSuite([Foo('foo_bar')])
+        tests_2 = unittest2.TestSuite([Foo('test_1'), Foo('test_2')])
 
         loader = DiscoveringTestLoader()
         loader.testMethodPrefix = 'foo'
@@ -1130,9 +1134,9 @@ class Test_TestLoader(unittest2.TestCase):
             def foo_bar(self): pass
         m.Foo = Foo
 
-        tests_1 = unittest.TestSuite([unittest.TestSuite([Foo('foo_bar')])])
-        tests_2 = unittest.TestSuite([Foo('test_1'), Foo('test_2')])
-        tests_2 = unittest.TestSuite([tests_2])
+        tests_1 = unittest2.TestSuite([unittest2.TestSuite([Foo('foo_bar')])])
+        tests_2 = unittest2.TestSuite([Foo('test_1'), Foo('test_2')])
+        tests_2 = unittest2.TestSuite([tests_2])
 
         loader = DiscoveringTestLoader()
         loader.testMethodPrefix = 'foo'
@@ -1325,7 +1329,7 @@ class Test_TestLoader(unittest2.TestCase):
     # "The default value is the TestSuite class"
     def test_suiteClass__default_value(self):
         loader = DiscoveringTestLoader()
-        self.assertTrue(loader.suiteClass is unittest.TestSuite)
+        self.assertTrue(loader.suiteClass is unittest2.TestSuite)
 
 
 if __name__ == '__main__':

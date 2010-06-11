@@ -23,6 +23,10 @@ except NameError:
         """Return -1 if x < y, 0 if x == y and 1 if x > y"""
         return (x > y) - (x < y)
 
+# In Python 2.5 and earlier TestSuites are not comparable
+# so we use unittest2.TestSuite for these tests
+DiscoveringTestLoader.suiteClass = unittest2.TestSuite
+
 
 class TestDiscovery(unittest2.TestCase):
 
