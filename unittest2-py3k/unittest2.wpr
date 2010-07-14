@@ -1,0 +1,17 @@
+#!wing
+#!version=3.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.directory-list = [{'dirloc': loc('.'),
+                        'excludes': [u'unittest2.egg-info',
+                                     u'unittest2/__pycache__',
+                                     u'dist',
+                                     u'build',
+                                     u'temp'],
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-type = 'shared'
