@@ -2,6 +2,6 @@
 
 __unittest = True
 
-from unittest2 import main_
+from unittest2 import main
 
-main_()
+main()
