@@ -1,0 +1,12 @@
+.*\.pyc
+.*\.pyo
+html/
+.*\.wpu
+\.tox/
+build
+dist
+latex
+.*\$py\.class
+unittest2py3k/unittest2/.*
+unittest2py3k/unittest2py3k.egg-info/.*
+unittest2py3k/py30/.*
