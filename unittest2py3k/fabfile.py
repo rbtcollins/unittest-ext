@@ -3,7 +3,7 @@ import os
 import shutil
 from fabric.operations import local
 
-PYTHON_HG_URL = http://hg.python.org/cpython/
+PYTHON_HG_URL = 'http://hg.python.org/cpython/'
 REVISION_FILE = "default-revision.txt"
 
 def create_lib(rev = None):
