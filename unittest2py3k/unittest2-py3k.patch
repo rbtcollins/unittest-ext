@@ -26,7 +26,7 @@ Index: unittest2/test/test_assertions.py
 +++ unittest2/test/test_assertions.py	(working copy)
 @@ -1,6 +1,6 @@
  import datetime
- 
+ import warnings
 -import unittest
 +import unittest2 as unittest
  
@@ -777,17 +777,17 @@ Index: unittest2/case.py
      """A class whose instances are single test cases.
  
      By default, the test code itself should be placed in a method named
-@@ -1019,8 +1022,8 @@
+@@ -953,8 +956,8 @@
          """
-         actual_seq, expected_seq = list(first), list(second)
+         first_seq, second_seq = list(first), list(second)
          try:
--            actual = collections.Counter(actual_seq)
--            expected = collections.Counter(expected_seq)
-+            actual = Counter(actual_seq)
-+            expected = Counter(expected_seq)
+-            first = collections.Counter(first_seq)
+-            second = collections.Counter(second_seq)
++            first = Counter(first_seq)
++            second = Counter(second_seq)
          except TypeError:
              # Handle case with unhashable elements
-             differences = _count_diff_all_purpose(actual_seq, expected_seq)
+             differences = _count_diff_all_purpose(first_seq, second_seq)
 @@ -1037,6 +1040,9 @@
              msg = self._formatMessage(msg, standardMsg)
              self.fail(msg)
