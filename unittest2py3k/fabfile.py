@@ -14,12 +14,7 @@ def create_lib(rev = None):
     if os.path.exists("cpython"):
         os.chdir("cpython")
         local("hg pull")
-        # In theory this is a step that should be performed, but hg returns
-        # a non-zero exit status if it can't figure out what/how to do the merge
-        # so for now the step below is left out.  Hopefully a soul wiser than
-        # myself can advise on the subject (with advise beyond add '||true')
-        # local("hg merge")
-        # #################
+        local("hg update")
         os.chdir(os.pardir)
     else:
         local("hg clone %s" % PYTHON_HG_URL)
@@ -40,6 +35,7 @@ def update_patch():
     # -u: because they're easier to read (and more svn like which I'm used to)
     # --recursive: go through all files in the tree
     # --new-file: treat absent files as empty, necessary for the compat module
+    # ||true: diff returns 1 if any differences are found, prevents fab complaining
     local("diff -u --recursive --new-file cpython/Lib/unittest unittest2 > unittest2-py3k.patchs || true")
 
 
