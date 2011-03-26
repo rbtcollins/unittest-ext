@@ -33,10 +33,13 @@ def update_patch():
     the subversion checkout.
     """
     # -u: because they're easier to read (and more svn like which I'm used to)
+    # -x '*.pyc': Don't do diff's on pyc files
     # --recursive: go through all files in the tree
     # --new-file: treat absent files as empty, necessary for the compat module
     # ||true: diff returns 1 if any differences are found, prevents fab complaining
-    local("diff -u --recursive --new-file cpython/Lib/unittest unittest2 > unittest2-py3k.patchs || true")
+    src = "unittest2"
+    patch_file = 'unittest2-py3k.patch'
+    local("diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest %s > %s || true" % (src, patch_file))
 
 
 

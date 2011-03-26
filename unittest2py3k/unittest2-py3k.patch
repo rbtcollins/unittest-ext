@@ -1,6 +1,6 @@
-diff -u --recursive --new-file cpython/Lib/unittest/case.py unittest2/case.py
---- cpython/Lib/unittest/case.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/case.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/case.py unittest2/case.py
+--- cpython/Lib/unittest/case.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/case.py	2011-03-25 21:38:23.000000000 -0400
 @@ -7,6 +7,9 @@
  import re
  import warnings
@@ -41,9 +41,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/case.py unittest2/case.py
      def assertMultiLineEqual(self, first, second, msg=None):
          """Assert that two multi-line strings are equal."""
          self.assertIsInstance(first, str, 'First argument is not a string')
-diff -u --recursive --new-file cpython/Lib/unittest/case.py.orig unittest2/case.py.orig
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/case.py.orig unittest2/case.py.orig
 --- cpython/Lib/unittest/case.py.orig	1969-12-31 19:00:00.000000000 -0500
-+++ unittest2/case.py.orig	2011-03-24 02:10:17.000000000 -0400
++++ unittest2/case.py.orig	2011-03-25 21:38:23.000000000 -0400
 @@ -0,0 +1,1183 @@
 +"""Test case implementation"""
 +
@@ -1228,9 +1228,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/case.py.orig unittest2/case.
 +            return self._description
 +        doc = self._testFunc.__doc__
 +        return doc and doc.split("\n")[0].strip() or None
-diff -u --recursive --new-file cpython/Lib/unittest/compatibility.py unittest2/compatibility.py
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/compatibility.py unittest2/compatibility.py
 --- cpython/Lib/unittest/compatibility.py	1969-12-31 19:00:00.000000000 -0500
-+++ unittest2/compatibility.py	2011-03-24 02:10:17.000000000 -0400
++++ unittest2/compatibility.py	2011-03-25 21:38:23.000000000 -0400
 @@ -0,0 +1,321 @@
 +try:
 +    from functools import cmp_to_key
@@ -1553,9 +1553,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/compatibility.py unittest2/c
 +                if newcount > 0:
 +                    result[elem] = newcount
 +            return result
-diff -u --recursive --new-file cpython/Lib/unittest/__init__.py unittest2/__init__.py
---- cpython/Lib/unittest/__init__.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/__init__.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/__init__.py unittest2/__init__.py
+--- cpython/Lib/unittest/__init__.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/__init__.py	2011-03-25 21:38:23.000000000 -0400
 @@ -9,9 +9,9 @@
  
  Simple usage:
@@ -1586,9 +1586,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/__init__.py unittest2/__init
  __unittest = True
  
  from .result import TestResult
-diff -u --recursive --new-file cpython/Lib/unittest/loader.py unittest2/loader.py
---- cpython/Lib/unittest/loader.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/loader.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/loader.py unittest2/loader.py
+--- cpython/Lib/unittest/loader.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/loader.py	2011-03-25 21:38:23.000000000 -0400
 @@ -5,11 +5,12 @@
  import sys
  import traceback
@@ -1621,9 +1621,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/loader.py unittest2/loader.p
          return testFnNames
  
      def discover(self, start_dir, pattern='test*.py', top_level_dir=None):
-diff -u --recursive --new-file cpython/Lib/unittest/main.py unittest2/main.py
---- cpython/Lib/unittest/main.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/main.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/main.py unittest2/main.py
+--- cpython/Lib/unittest/main.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/main.py	2011-03-25 21:38:23.000000000 -0400
 @@ -3,6 +3,7 @@
  import sys
  import os
@@ -1641,19 +1641,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/main.py unittest2/main.py
      """A command-line program that runs a set of tests; this is primarily
         for making test modules conveniently executable.
      """
-Binary files cpython/Lib/unittest/__pycache__/case.cpython-32.pyc and unittest2/__pycache__/case.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/compatibility.cpython-32.pyc and unittest2/__pycache__/compatibility.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/__init__.cpython-32.pyc and unittest2/__pycache__/__init__.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/loader.cpython-32.pyc and unittest2/__pycache__/loader.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/main.cpython-32.pyc and unittest2/__pycache__/main.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/result.cpython-32.pyc and unittest2/__pycache__/result.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/runner.cpython-32.pyc and unittest2/__pycache__/runner.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/signals.cpython-32.pyc and unittest2/__pycache__/signals.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/suite.cpython-32.pyc and unittest2/__pycache__/suite.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/__pycache__/util.cpython-32.pyc and unittest2/__pycache__/util.cpython-32.pyc differ
-diff -u --recursive --new-file cpython/Lib/unittest/result.py unittest2/result.py
---- cpython/Lib/unittest/result.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/result.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/result.py unittest2/result.py
+--- cpython/Lib/unittest/result.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/result.py	2011-03-25 21:38:23.000000000 -0400
 @@ -4,6 +4,7 @@
  import io
  import sys
@@ -1671,9 +1661,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/result.py unittest2/result.p
      """Holder for test result information.
  
      Test results are automatically managed by the TestCase and TestSuite
-diff -u --recursive --new-file cpython/Lib/unittest/suite.py unittest2/suite.py
---- cpython/Lib/unittest/suite.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/suite.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/suite.py unittest2/suite.py
+--- cpython/Lib/unittest/suite.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/suite.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,6 +1,7 @@
  """TestSuite"""
  
@@ -1700,9 +1690,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/suite.py unittest2/suite.py
          if isinstance(test, type) and issubclass(test,
                                                   (case.TestCase, TestSuite)):
              raise TypeError("TestCases and TestSuites must be instantiated "
-diff -u --recursive --new-file cpython/Lib/unittest/suite.py.orig unittest2/suite.py.orig
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/suite.py.orig unittest2/suite.py.orig
 --- cpython/Lib/unittest/suite.py.orig	1969-12-31 19:00:00.000000000 -0500
-+++ unittest2/suite.py.orig	2011-03-24 02:10:17.000000000 -0400
++++ unittest2/suite.py.orig	2011-03-25 21:38:23.000000000 -0400
 @@ -0,0 +1,301 @@
 +"""TestSuite"""
 +
@@ -2005,24 +1995,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/suite.py.orig unittest2/suit
 +    _previousTestClass = None
 +    _moduleSetUpFailed = False
 +    shouldStop = False
-Binary files cpython/Lib/unittest/test/__pycache__/dummy.cpython-32.pyc and unittest2/test/__pycache__/dummy.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/__init__.cpython-32.pyc and unittest2/test/__pycache__/__init__.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/support.cpython-32.pyc and unittest2/test/__pycache__/support.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_assertions.cpython-32.pyc and unittest2/test/__pycache__/test_assertions.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_break.cpython-32.pyc and unittest2/test/__pycache__/test_break.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_case.cpython-32.pyc and unittest2/test/__pycache__/test_case.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_discovery.cpython-32.pyc and unittest2/test/__pycache__/test_discovery.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_functiontestcase.cpython-32.pyc and unittest2/test/__pycache__/test_functiontestcase.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_loader.cpython-32.pyc and unittest2/test/__pycache__/test_loader.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_program.cpython-32.pyc and unittest2/test/__pycache__/test_program.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_result.cpython-32.pyc and unittest2/test/__pycache__/test_result.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_runner.cpython-32.pyc and unittest2/test/__pycache__/test_runner.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_setups.cpython-32.pyc and unittest2/test/__pycache__/test_setups.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_skipping.cpython-32.pyc and unittest2/test/__pycache__/test_skipping.cpython-32.pyc differ
-Binary files cpython/Lib/unittest/test/__pycache__/test_suite.cpython-32.pyc and unittest2/test/__pycache__/test_suite.cpython-32.pyc differ
-diff -u --recursive --new-file cpython/Lib/unittest/test/support.py unittest2/test/support.py
---- cpython/Lib/unittest/test/support.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/support.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/support.py unittest2/test/support.py
+--- cpython/Lib/unittest/test/support.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/support.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,4 +1,9 @@
 -import unittest
 +import unittest2 as unittest
@@ -2121,9 +2096,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/support.py unittest2/te
 +        if quiet is None:
 +            quiet = True
 +    return _filterwarnings(filters, quiet)
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_assertions.py unittest2/test/test_assertions.py
---- cpython/Lib/unittest/test/test_assertions.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_assertions.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_assertions.py unittest2/test/test_assertions.py
+--- cpython/Lib/unittest/test/test_assertions.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_assertions.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,6 +1,6 @@
  import datetime
  import warnings
@@ -2132,9 +2107,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_assertions.py unit
  
  
  class Test_Assertions(unittest.TestCase):
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_break.py unittest2/test/test_break.py
---- cpython/Lib/unittest/test/test_break.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_break.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_break.py unittest2/test/test_break.py
+--- cpython/Lib/unittest/test/test_break.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_break.py	2011-03-25 21:38:23.000000000 -0400
 @@ -5,7 +5,7 @@
  import signal
  import weakref
@@ -2144,9 +2119,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_break.py unittest2
  
  
  @unittest.skipUnless(hasattr(os, 'kill'), "Test requires os.kill")
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_case.py unittest2/test/test_case.py
---- cpython/Lib/unittest/test/test_case.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_case.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_case.py unittest2/test/test_case.py
+--- cpython/Lib/unittest/test/test_case.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_case.py	2011-03-25 21:38:23.000000000 -0400
 @@ -9,7 +9,7 @@
  from copy import deepcopy
  from test import support
@@ -2175,9 +2150,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_case.py unittest2/
 +    def testBaseClassInheritance(self):
 +        import unittest as unittestorig
 +        self.assertTrue(issubclass(unittest.TestCase, unittestorig.TestCase))
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_case.py.orig unittest2/test/test_case.py.orig
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_case.py.orig unittest2/test/test_case.py.orig
 --- cpython/Lib/unittest/test/test_case.py.orig	1969-12-31 19:00:00.000000000 -0500
-+++ unittest2/test/test_case.py.orig	2011-03-24 02:10:17.000000000 -0400
++++ unittest2/test/test_case.py.orig	2011-03-25 21:38:23.000000000 -0400
 @@ -0,0 +1,1219 @@
 +import difflib
 +import pprint
@@ -3398,9 +3373,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_case.py.orig unitt
 +            klass('test_something').run(result)
 +            self.assertEqual(len(result.errors), 1)
 +            self.assertEqual(result.testsRun, 1)
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_discovery.py unittest2/test/test_discovery.py
---- cpython/Lib/unittest/test/test_discovery.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_discovery.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_discovery.py unittest2/test/test_discovery.py
+--- cpython/Lib/unittest/test/test_discovery.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_discovery.py	2011-03-25 21:38:23.000000000 -0400
 @@ -2,7 +2,7 @@
  import re
  import sys
@@ -3419,18 +3394,18 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_discovery.py unitt
          self.assertTrue(self.wasRun)
          self.assertEqual(suite._tests, tests)
  
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_functiontestcase.py unittest2/test/test_functiontestcase.py
---- cpython/Lib/unittest/test/test_functiontestcase.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_functiontestcase.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_functiontestcase.py unittest2/test/test_functiontestcase.py
+--- cpython/Lib/unittest/test/test_functiontestcase.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_functiontestcase.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,4 +1,4 @@
 -import unittest
 +import unittest2 as unittest
  
  from .support import LoggingResult
  
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_loader.py unittest2/test/test_loader.py
---- cpython/Lib/unittest/test/test_loader.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_loader.py	2011-03-24 02:11:55.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_loader.py unittest2/test/test_loader.py
+--- cpython/Lib/unittest/test/test_loader.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_loader.py	2011-03-25 21:38:23.000000000 -0400
 @@ -2,7 +2,7 @@
  import types
  
@@ -3484,9 +3459,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_loader.py unittest
 +    def testBaseClassInheritance(self):
 +        import unittest as unittestorig
 +        self.assertTrue(issubclass(unittest.TestLoader, unittestorig.TestLoader))
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_loader.py~ unittest2/test/test_loader.py~
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_loader.py~ unittest2/test/test_loader.py~
 --- cpython/Lib/unittest/test/test_loader.py~	1969-12-31 19:00:00.000000000 -0500
-+++ unittest2/test/test_loader.py~	2011-03-24 02:10:17.000000000 -0400
++++ unittest2/test/test_loader.py~	2011-03-25 21:38:23.000000000 -0400
 @@ -0,0 +1,1296 @@
 +import sys
 +import types
@@ -4784,9 +4759,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_loader.py~ unittes
 +    def testBaseClassInheritance(self):
 +        import unittest as unittestorig
 +        self.assertTrue(issubclass(unittest.TestLoader, unittestorig.TestLoader))
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_program.py unittest2/test/test_program.py
---- cpython/Lib/unittest/test/test_program.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_program.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_program.py unittest2/test/test_program.py
+--- cpython/Lib/unittest/test/test_program.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_program.py	2011-03-25 21:38:23.000000000 -0400
 @@ -2,7 +2,7 @@
  
  import os
@@ -4831,9 +4806,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_program.py unittes
 -
  if __name__ == '__main__':
      unittest.main()
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_result.py unittest2/test/test_result.py
---- cpython/Lib/unittest/test/test_result.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_result.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_result.py unittest2/test/test_result.py
+--- cpython/Lib/unittest/test/test_result.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_result.py	2011-03-25 21:38:23.000000000 -0400
 @@ -2,11 +2,10 @@
  import sys
  import textwrap
@@ -4868,9 +4843,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_result.py unittest
                                       RuntimeWarning)):
              result = OldResult()
              test.run(result)
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_runner.py unittest2/test/test_runner.py
---- cpython/Lib/unittest/test/test_runner.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_runner.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_runner.py unittest2/test/test_runner.py
+--- cpython/Lib/unittest/test/test_runner.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_runner.py	2011-03-25 21:38:23.000000000 -0400
 @@ -4,7 +4,7 @@
  import pickle
  import subprocess
@@ -4889,9 +4864,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_runner.py unittest
      def test_pickle_unpickle(self):
          # Issue #7197: a TextTestRunner should be (un)pickleable. This is
          # required by test_multiprocessing under Windows (in verbose mode).
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_setups.py unittest2/test/test_setups.py
---- cpython/Lib/unittest/test/test_setups.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_setups.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_setups.py unittest2/test/test_setups.py
+--- cpython/Lib/unittest/test/test_setups.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_setups.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,7 +1,7 @@
  import io
  import sys
@@ -4901,18 +4876,18 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_setups.py unittest
  
  
  def resultFactory(*_):
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_skipping.py unittest2/test/test_skipping.py
---- cpython/Lib/unittest/test/test_skipping.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_skipping.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_skipping.py unittest2/test/test_skipping.py
+--- cpython/Lib/unittest/test/test_skipping.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_skipping.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,4 +1,4 @@
 -import unittest
 +import unittest2 as unittest
  
  from .support import LoggingResult
  
-diff -u --recursive --new-file cpython/Lib/unittest/test/test_suite.py unittest2/test/test_suite.py
---- cpython/Lib/unittest/test/test_suite.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/test_suite.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/test_suite.py unittest2/test/test_suite.py
+--- cpython/Lib/unittest/test/test_suite.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/test_suite.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,4 +1,4 @@
 -import unittest
 +import unittest2 as unittest
@@ -4930,9 +4905,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/test_suite.py unittest2
  
  
  if __name__ == '__main__':
-diff -u --recursive --new-file cpython/Lib/unittest/test/_test_warnings.py unittest2/test/_test_warnings.py
---- cpython/Lib/unittest/test/_test_warnings.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/test/_test_warnings.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/test/_test_warnings.py unittest2/test/_test_warnings.py
+--- cpython/Lib/unittest/test/_test_warnings.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/test/_test_warnings.py	2011-03-25 21:38:23.000000000 -0400
 @@ -12,7 +12,7 @@
  
  import io
@@ -4942,9 +4917,9 @@ diff -u --recursive --new-file cpython/Lib/unittest/test/_test_warnings.py unitt
  import warnings
  
  def warnfun():
-diff -u --recursive --new-file cpython/Lib/unittest/util.py unittest2/util.py
---- cpython/Lib/unittest/util.py	2011-03-24 01:14:40.000000000 -0400
-+++ unittest2/util.py	2011-03-24 02:10:17.000000000 -0400
+diff -u -x '*.pyc' --recursive --new-file cpython/Lib/unittest/util.py unittest2/util.py
+--- cpython/Lib/unittest/util.py	2011-03-24 02:43:51.000000000 -0400
++++ unittest2/util.py	2011-03-25 21:38:23.000000000 -0400
 @@ -1,6 +1,7 @@
  """Various utility functions."""
  
