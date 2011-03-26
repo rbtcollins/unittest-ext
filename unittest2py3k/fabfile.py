@@ -23,7 +23,7 @@ def create_lib(rev = None):
         local("rm -rf unittest2")
     shutil.copytree('cpython/Lib/unittest', 'unittest2')
     local("touch unittest2/compatibility.py")
-    local("cat unittest2-py3k.patch|patch -p0")
+    #local("cat unittest2-py3k.patch|patch -p0")
 
 
 def update_patch():
